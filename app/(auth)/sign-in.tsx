@@ -1,0 +1,99 @@
+import Custombutton from "@/src/components/ui/Custombutton";
+import FormField from "@/src/components/ui/FormField";
+import { showMessage } from "@/src/lib/utils/dialog";
+import { useAuthStore } from "@/src/store/authStore";
+import { Link } from "expo-router";
+import React, { useState } from "react";
+import { StatusBar, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const SignIn = () => {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { signIn, isLoading: signInLoading } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const handleSignIn = async () => {
+    if (!form.email || !form.password) {
+      showMessage("Please fill in all fields", "warning");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      await signIn(form.email, form.password);
+    } catch (error: any) {
+      showMessage(error.message, "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <SafeAreaView className="bg-primary flex-1">
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        extraScrollHeight={10}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="w-full justify-center min-h-screen px-4 py-6">
+          <Text className="font-orbitron text-4xl text-accent mb-2">
+            Join Elite
+          </Text>
+          <Text className="text-gray-300 mt-2 font-inter-medium text-base">
+            Welcome back! Please sign in to your account.
+          </Text>
+
+          <FormField
+            title="Email"
+            placeholder="your@email.com"
+            value={form.email}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
+            otherStyles="mt-7"
+            iconName="mail-outline"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            readOnly={isLoading}
+          />
+
+          <FormField
+            title="Password"
+            placeholder="Enter your password"
+            value={form.password}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
+            otherStyles="mt-7"
+            iconName="lock-closed-outline"
+            readOnly={isLoading}
+          />
+
+          <Custombutton
+            title="Sign In"
+            handlePress={handleSignIn}
+            containerStyles="w-full mt-7"
+            isLoading={isLoading}
+          />
+
+          <View className="flex-row justify-center items-center pt-5 gap-2">
+            <Text className="text-lg text-gray-100 font-inter">
+              Don't have an account?
+            </Text>
+            <Link
+              href={"/sign-up"}
+              className="text-accent-light text-lg font-inter-semibold"
+            >
+              Sign Up
+            </Link>
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+      <StatusBar barStyle="light-content" />
+    </SafeAreaView>
+  );
+};
+
+export default SignIn;

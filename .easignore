@@ -41,18 +41,3 @@ app-example
 # generated native folders
 /ios
 /android
-
-google-services.json
-
-# env
-.env
-.env.*
-app.config.js
-app.config.ts
-
-# Supabase
-supabase/.env
-supabase/functions/service-account.json
-
-# Expo
-.expo
