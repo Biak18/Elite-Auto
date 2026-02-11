@@ -23,7 +23,7 @@ const Profile = () => {
   const favoriteCount = useFavoriteStore((state) => state.favoriteIds.size);
   const appointments = useAppointmentStore((state) => state.appointments);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [darkModeEnabled, setDarkModeEnabled] = useState(true);
+  // const [darkModeEnabled, setDarkModeEnabled] = useState(true);
   useEffect(() => {
     async function prepare() {
       if (user) await fetchProfile(user.id);
@@ -123,7 +123,6 @@ const Profile = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
       >
-        {/* Header */}
         <View className="px-6 pt-4 pb-6">
           <Text className="font-orbitron text-3xl text-accent mb-1">
             Profile
@@ -131,11 +130,9 @@ const Profile = () => {
           <Text className="text-slate-400 text-sm">Manage your account</Text>
         </View>
 
-        {/* Profile Card */}
         <View className="mx-6 mb-6">
           <View className="bg-slate-800/50 rounded-3xl p-6 border border-slate-700/30">
             <View className="flex-row items-center mb-6">
-              {/* Avatar */}
               <View className="relative">
                 {profile?.avatarSignedUrl ? (
                   <Image
@@ -154,7 +151,6 @@ const Profile = () => {
                 <View className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-xl border-2 border-primary" />
               </View>
 
-              {/* Info */}
               <View className="flex-1 ml-4">
                 <Text className="text-xl font-bold text-slate-100">
                   {profile?.full_name || "Elite Member"}
@@ -162,25 +158,7 @@ const Profile = () => {
                 <Text className="text-slate-400 text-sm mt-1">
                   {user?.email}
                 </Text>
-                {/* <View className="flex-row items-center mt-2">
-                  <View
-                    className={`px-3 py-1 rounded-full ${
-                      profile?.role === "seller"
-                        ? "bg-accent/20"
-                        : "bg-blue-500/20"
-                    }`}
-                  >
-                    <Text
-                      className={`text-xs font-semibold ${
-                        profile?.role === "seller"
-                          ? "text-accent"
-                          : "text-blue-400"
-                      }`}
-                    >
-                      {profile?.role === "seller" ? "🚗 Seller" : "🔍 Buyer"}
-                    </Text>
-                  </View>
-                </View> */}
+
                 {profile?.phone && (
                   <Text className="text-slate-400 text-sm mt-0.5">
                     {profile.phone}
@@ -188,7 +166,6 @@ const Profile = () => {
                 )}
               </View>
 
-              {/* Edit Button */}
               <TouchableOpacity
                 className="w-10 h-10 bg-accent/10 rounded-full items-center justify-center"
                 onPress={() => router.push("/edit-profile")}
@@ -197,7 +174,6 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
 
-            {/* Stats */}
             <View className="flex-row gap-3">
               <StatCard value={favoriteCount} label="Favorites" icon="heart" />
               <StatCard
@@ -210,7 +186,6 @@ const Profile = () => {
           </View>
         </View>
 
-        {/* Account Section */}
         <View className="px-6 mb-6">
           <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
             Account
@@ -235,7 +210,6 @@ const Profile = () => {
           /> */}
         </View>
 
-        {/* Preferences Section */}
         <View className="px-6 mb-6">
           <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
             Preferences
@@ -276,7 +250,6 @@ const Profile = () => {
           />
         </View>
 
-        {/* More Section */}
         <View className="px-6 mb-6">
           <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
             More
@@ -309,7 +282,6 @@ const Profile = () => {
           />
         </View>
 
-        {/* Sign Out Button */}
         <View className="px-6 pb-8">
           <TouchableOpacity
             onPress={handleSignOut}
@@ -323,7 +295,6 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Footer */}
         <View className="items-center pb-8">
           <Text className="text-slate-500 text-xs">© 2024 Elite Auto</Text>
           <Text className="text-slate-600 text-xs mt-1">

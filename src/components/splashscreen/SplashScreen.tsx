@@ -18,7 +18,6 @@ const AnimatedSplash = ({ onFinish }: { onFinish?: () => void }) => {
   const slideAnim = new Animated.Value(50);
 
   useEffect(() => {
-    // Parallel animations
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -38,7 +37,6 @@ const AnimatedSplash = ({ onFinish }: { onFinish?: () => void }) => {
       }),
     ]).start();
 
-    // Auto hide after 2.5 seconds
     const timer = setTimeout(() => {
       onFinish?.();
     }, 2500);

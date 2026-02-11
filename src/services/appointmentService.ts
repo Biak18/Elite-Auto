@@ -3,7 +3,6 @@ import { Appointment, AppointmentDetail } from "../types/interfaces";
 
 export const appointmentService = {
   getAppointmentsData: async (isSeller: boolean, user_id: string) => {
-    // First, fetch appointments
     let query = supabase
       .from("appointments")
       .select("*, cars (id, name, brand, image_url)")

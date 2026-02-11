@@ -1,4 +1,5 @@
 import { supabase } from "@/src/lib/supabase";
+import { showMessage } from "./dialog";
 
 const sendNotification = async (
   userId: string,
@@ -25,7 +26,7 @@ const sendNotification = async (
         message: error.message,
         context: error.context,
       });
-      throw error;
+      showMessage(error.message, "error");
     }
 
     return result;
@@ -35,7 +36,7 @@ const sendNotification = async (
       stack: error.stack,
       full: error,
     });
-    throw error;
+    showMessage(error.message, "error");
   }
 };
 

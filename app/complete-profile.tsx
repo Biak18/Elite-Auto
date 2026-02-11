@@ -116,7 +116,6 @@ export default function CompleteProfile() {
           </View>
         </View>
 
-        {/* Role Selection */}
         <View className="px-6 mb-6">
           <Text className="text-slate-300 text-base font-semibold mb-3">
             I want to:
@@ -174,7 +173,6 @@ export default function CompleteProfile() {
           </View>
         </View>
 
-        {/* Form */}
         <View className="px-6 gap-4">
           <FormField
             title="Full Name"
@@ -210,7 +208,6 @@ export default function CompleteProfile() {
           />
         </View>
 
-        {/* Submit Button */}
         <View className="px-6 py-8">
           <TouchableOpacity
             onPress={handleComplete}
@@ -224,7 +221,6 @@ export default function CompleteProfile() {
         </View>
       </ScrollView>
 
-      {/* Loading Overlay */}
       {isLoading ||
         (!profile && (
           <View className="absolute inset-0 bg-black/50 justify-center items-center">

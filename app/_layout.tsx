@@ -29,7 +29,6 @@ export default function RootLayout() {
     useState<Notifications.Notification | null>(null);
   const notificationListener = useRef<EventSubscription | null>(null);
   const responseListener = useRef<EventSubscription | null>(null);
-  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     notificationListener.current =

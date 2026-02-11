@@ -115,7 +115,7 @@ export default function AppointmentsScreen() {
           );
         }
       } catch (notifError) {
-        console.error("Failed to send notification:", notifError);
+        showMessage("Failed to send notification:" + notifError, "error");
       }
 
       showMessage(`Booking ${newStatus} successfully`, "success");

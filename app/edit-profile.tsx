@@ -153,7 +153,6 @@ const EditProfile = () => {
   return (
     <SafeAreaView className="bg-primary flex-1">
       <View className="flex-1">
-        {/* Top Bar */}
         <View className="bg-secondary h-16 flex-row justify-between items-center px-4">
           <TouchableOpacity onPress={() => router.back()} className="w-20">
             <Ionicons name="arrow-back" size={24} color="#fbbf24" />
@@ -175,7 +174,6 @@ const EditProfile = () => {
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Avatar */}
           <View className="justify-center items-center mt-6 mb-2">
             <View className="relative">
               {profile?.avatarSignedUrl ? (
@@ -206,8 +204,6 @@ const EditProfile = () => {
               <Text className="text-accent font-inter">Change Photo</Text>
             </TouchableOpacity>
           </View>
-
-          {/* Personal Information */}
           <View className="px-6 mt-6">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
               Personal Information
@@ -242,8 +238,6 @@ const EditProfile = () => {
               keyboardType="numeric"
               otherStyles="mt-4"
             />
-
-            {/* Gender Picker */}
             <View className="mt-4">
               <DropdownPicker
                 title="Gender"
@@ -294,7 +288,6 @@ const EditProfile = () => {
                 />
               </TouchableOpacity>
 
-              {/* Dropdown Options */}
               {showGenderPicker && (
                 <View className="mt-2 bg-secondary rounded-2xl border border-slate-700 overflow-hidden">
                   {genderOptions.map((option) => (
@@ -335,7 +328,6 @@ const EditProfile = () => {
             </View>
           </View>
 
-          {/* Address Information */}
           <View className="px-6 mt-6">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
               Address
@@ -359,7 +351,6 @@ const EditProfile = () => {
             />
           </View>
 
-          {/* About */}
           {/* <View className="px-6 mt-6">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
               About
@@ -437,7 +428,6 @@ const EditProfile = () => {
             </Text>
           </View>
 
-          {/* Email (non-editable) */}
           <View className="px-6 mt-6 mb-8">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
               Account

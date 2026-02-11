@@ -231,7 +231,6 @@ export default function AddCarScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View className="flex-1">
-          {/* Top Bar */}
           <View className="bg-secondary h-16 flex-row justify-between items-center px-4">
             <TouchableOpacity onPress={() => router.back()} className="w-20">
               <Ionicons name="chevron-back" size={24} color="#fbbf24" />
@@ -243,14 +242,12 @@ export default function AddCarScreen() {
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/*  Images  */}
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
                 Car Images
               </Text>
 
               <View className="flex-row flex-wrap gap-3">
-                {/* Existing images */}
                 {images.map((img, index) => (
                   <View key={index} className="relative">
                     <TouchableOpacity
@@ -272,8 +269,6 @@ export default function AddCarScreen() {
                         </View>
                       )}
                     </TouchableOpacity>
-
-                    {/* Remove button */}
                     <TouchableOpacity
                       onPress={() => removeImage(index)}
                       className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full items-center justify-center border-2 border-primary"
@@ -282,8 +277,6 @@ export default function AddCarScreen() {
                     </TouchableOpacity>
                   </View>
                 ))}
-
-                {/* Add image button */}
                 {images.length < 6 && (
                   <TouchableOpacity
                     onPress={pickImages}
@@ -358,8 +351,6 @@ export default function AddCarScreen() {
                 </View>
               </View>
             </View>
-
-            {/*  Price  */}
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
                 Pricing
@@ -374,8 +365,6 @@ export default function AddCarScreen() {
                 keyboardType="numeric"
               />
             </View>
-
-            {/*  Specs  */}
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
                 Specifications
@@ -461,8 +450,6 @@ export default function AddCarScreen() {
                 otherStyles="mt-4"
               />
             </View>
-
-            {/*  Description  */}
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
                 Description
@@ -488,8 +475,6 @@ export default function AddCarScreen() {
                 />
               </View>
             </View>
-
-            {/*  Submit Button  */}
             <View className="px-6 py-8">
               <TouchableOpacity
                 onPress={handleSubmit}
@@ -511,8 +496,6 @@ export default function AddCarScreen() {
               </Text>
             </View>
           </ScrollView>
-
-          {/* Loading Overlay */}
           {isLoading && (
             <View className="absolute inset-0 bg-black/60 justify-center items-center">
               <View className="bg-secondary p-6 rounded-2xl items-center border border-slate-700">

@@ -28,8 +28,8 @@ const Favorite = () => {
   const { allCars } = useCarStore();
 
   useEffect(() => {
-    loadFavorites(user?.id || "");
-  }, []);
+    if (user) loadFavorites(user.id);
+  }, [user]);
 
   const favoriteCars = allCars.filter((car) => favoriteIds.has(car.id));
 
@@ -54,7 +54,6 @@ const Favorite = () => {
       style={{ width: CARD_WIDTH }}
     >
       <View className="bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700/30">
-        {/* Image */}
         <View className="relative h-36">
           <Image
             source={
@@ -67,7 +66,6 @@ const Favorite = () => {
           />
           <View className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
 
-          {/* Heart Button */}
           <TouchableOpacity
             className="absolute top-2 right-2 w-8 h-8 bg-slate-900/60 backdrop-blur-md rounded-full items-center justify-center"
             onPress={() => toggleFavorite(user?.id || "", car.id)}
@@ -79,13 +77,11 @@ const Favorite = () => {
             />
           </TouchableOpacity>
 
-          {/* Year Badge */}
           <View className="absolute bottom-2 left-2 bg-accent/90 px-2 py-0.5 rounded-md">
             <Text className="text-primary text-xs font-bold">{car.year}</Text>
           </View>
         </View>
 
-        {/* Info */}
         <View className="p-3 flex-1">
           <Text className="text-slate-400 text-xs uppercase tracking-wider">
             {car.brand}
@@ -100,7 +96,6 @@ const Favorite = () => {
             {formatPrice(car.price)}
           </Text>
 
-          {/* Quick Specs */}
           <View className="flex-row justify-between mt-2 pt-2 border-t border-slate-700/30">
             <View className="flex-row items-center">
               <Ionicons name="speedometer-outline" size={12} color="#64748b" />

@@ -14,6 +14,7 @@ import {
   View,
 } from "react-native";
 import { showMessage } from "../lib/utils/dialog";
+import { formatTime } from "../lib/utils/formatters";
 import { notifications } from "../lib/utils/notifications";
 import { useAppointmentStore } from "../store/appointmentStore";
 
@@ -55,12 +56,12 @@ export default function BookingModal({
     "17:00",
   ];
 
-  const formatTimeDisplay = (time: string) => {
-    const hour = parseInt(time.split(":")[0]);
-    const isPM = hour >= 12;
-    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-    return `${displayHour}:${time.split(":")[1]} ${isPM ? "PM" : "AM"}`;
-  };
+  // const formatTimeDisplay = (time: string) => {
+  //   const hour = parseInt(time.split(":")[0]);
+  //   const isPM = hour >= 12;
+  //   const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+  //   return `${displayHour}:${time.split(":")[1]} ${isPM ? "PM" : "AM"}`;
+  // };
 
   const handleSubmit = async () => {
     if (!user) return;
@@ -93,7 +94,7 @@ export default function BookingModal({
           data.id,
         );
       } catch (notifError) {
-        console.error("Failed to send notification:", notifError);
+        showMessage("Failed to send notification:" + notifError, "error");
       }
 
       showMessage(
@@ -105,11 +106,6 @@ export default function BookingModal({
           },
         },
       );
-      // Alert.alert(
-      //   "Booking Sent!",
-      //   "Your test drive request has been sent. The seller will contact you soon.",
-      //   [{ text: "OK", onPress: onSuccess }],
-      // );
 
       onClose();
     } catch (error: any) {
@@ -123,7 +119,6 @@ export default function BookingModal({
     <Modal visible={visible} animationType="slide" transparent>
       <View className="flex-1 bg-black/60 justify-end">
         <View className="bg-secondary rounded-t-3xl max-h-[85%]">
-          {/* Header */}
           <View className="flex-row justify-between items-center p-6 border-b border-slate-700/50">
             <Text className="text-xl font-orbitron text-accent">
               Book Test Drive
@@ -137,7 +132,6 @@ export default function BookingModal({
             className="px-6 py-4"
             showsVerticalScrollIndicator={false}
           >
-            {/* Car Info */}
             <View className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/30 mb-6">
               <Text className="text-slate-400 text-xs uppercase tracking-wider mb-1">
                 Test Drive For
@@ -147,7 +141,6 @@ export default function BookingModal({
               </Text>
             </View>
 
-            {/* Date Picker */}
             <View className="mb-6">
               <Text className="text-slate-400 text-xs uppercase tracking-wider mb-3">
                 Preferred Date
@@ -182,7 +175,6 @@ export default function BookingModal({
               )}
             </View>
 
-            {/* Time Slots */}
             <View className="mb-6">
               <Text className="text-slate-400 text-xs uppercase tracking-wider mb-3">
                 Preferred Time
@@ -205,14 +197,13 @@ export default function BookingModal({
                           : "text-slate-300"
                       }`}
                     >
-                      {formatTimeDisplay(time)}
+                      {formatTime(time)}
                     </Text>
                   </TouchableOpacity>
                 ))}
               </View>
             </View>
 
-            {/* Notes */}
             <View className="mb-6">
               <Text className="text-slate-400 text-xs uppercase tracking-wider mb-3">
                 Notes (Optional)
@@ -229,7 +220,6 @@ export default function BookingModal({
               />
             </View>
 
-            {/* Submit Button */}
             <TouchableOpacity
               onPress={handleSubmit}
               disabled={isSubmitting}

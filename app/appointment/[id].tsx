@@ -70,7 +70,7 @@ export default function AppointmentDetailScreen() {
           );
         }
       } catch (notifError) {
-        console.error("Notification failed:", notifError);
+        showMessage("Notification failed:" + notifError, "error");
       }
 
       updateAppointmentStatus(id, newStatus);
@@ -173,7 +173,6 @@ export default function AppointmentDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-primary">
-      {/* Header */}
       <View className="flex-row justify-between items-center px-6 py-4">
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={24} color="#fbbf24" />
@@ -185,7 +184,6 @@ export default function AppointmentDetailScreen() {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Status Badge */}
         <View className="px-6 mb-4">
           <View
             className={`${statusStyle.bg} border ${statusStyle.border} px-4 py-2 rounded-xl self-start`}
@@ -196,7 +194,6 @@ export default function AppointmentDetailScreen() {
           </View>
         </View>
 
-        {/* Car Info */}
         <TouchableOpacity
           onPress={() => router.push(`/car/${appointment.car.id}`)}
           className="mx-6 bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700/30 mb-6"
@@ -224,7 +221,6 @@ export default function AppointmentDetailScreen() {
           </View>
         </TouchableOpacity>
 
-        {/* Date & Time */}
         <View className="px-6 mb-6">
           <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
             Appointment Time
@@ -253,7 +249,6 @@ export default function AppointmentDetailScreen() {
           </View>
         </View>
 
-        {/* Notes */}
         {appointment.notes && (
           <View className="px-6 mb-6">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
@@ -267,7 +262,6 @@ export default function AppointmentDetailScreen() {
           </View>
         )}
 
-        {/* Contact Person Info */}
         <View className="px-6 mb-6">
           <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
             {isSeller ? "Buyer Information" : "Seller Information"}
@@ -296,7 +290,6 @@ export default function AppointmentDetailScreen() {
               </View>
             </View>
 
-            {/* Phone */}
             {contactPerson.phone && (
               <View className="flex-row items-center py-3 border-t border-slate-700/30">
                 <Ionicons name="call" size={18} color="#64748b" />
@@ -306,7 +299,6 @@ export default function AppointmentDetailScreen() {
               </View>
             )}
 
-            {/* Call & Message Buttons */}
             <View className="flex-row gap-3 mt-4">
               <TouchableOpacity
                 onPress={() => handleCall(contactPerson.phone)}
@@ -327,7 +319,6 @@ export default function AppointmentDetailScreen() {
           </View>
         </View>
 
-        {/* Actions */}
         {appointment.status === "pending" && (
           <View className="px-6 mb-8">
             {isSeller ? (

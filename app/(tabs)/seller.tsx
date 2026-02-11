@@ -65,7 +65,6 @@ export default function SellerDashboard() {
         onPress={() => router.push(`/car/${item.id}`)}
       >
         <View className="flex-row">
-          {/* Image */}
           <Image
             source={
               item.image_url
@@ -76,7 +75,6 @@ export default function SellerDashboard() {
             resizeMode="cover"
           />
 
-          {/* Info */}
           <View className="flex-1 p-4 justify-between">
             <View className="flex-row justify-between items-start">
               <View className="w-36">
@@ -91,7 +89,6 @@ export default function SellerDashboard() {
                 </Text>
               </View>
 
-              {/* Status Badge */}
               <View
                 className={`${status.bg} border ${status.border} px-3 py-1 rounded-full`}
               >
@@ -127,7 +124,7 @@ export default function SellerDashboard() {
   }
 
   const handleRefresh = async () => {
-    await getCarByOwnerId(user?.id || "");
+    if (user) await getCarByOwnerId(user.id);
   };
 
   return (
@@ -163,7 +160,6 @@ export default function SellerDashboard() {
                 </Text>
               </View>
 
-              {/* Add Car Button */}
               <TouchableOpacity
                 onPress={() => router.push("/seller/add-car")}
                 className="bg-accent w-12 h-12 rounded-xl items-center justify-center"
@@ -172,7 +168,6 @@ export default function SellerDashboard() {
               </TouchableOpacity>
             </View>
 
-            {/* Stats Row */}
             <View className="mt-4 mb-4 flex-row gap-3">
               <View className="flex-1 bg-slate-800/50 rounded-xl p-3 border border-slate-700/30 items-center">
                 <Text className="text-accent text-xl font-bold">

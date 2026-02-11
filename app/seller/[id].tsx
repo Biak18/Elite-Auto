@@ -303,7 +303,6 @@ export default function EditCarScreen() {
         },
       });
     } catch (err: any) {
-      console.error("Update car error:", err);
       showMessage(err.message || "Something went wrong", "error");
     } finally {
       setIsLoading(false);
@@ -318,7 +317,6 @@ export default function EditCarScreen() {
         keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
       >
         <View className="flex-1">
-          {/* Top Bar */}
           <View className="bg-secondary h-16 flex-row justify-between items-center px-4">
             <TouchableOpacity onPress={() => router.back()} className="w-20">
               <Ionicons name="chevron-back" size={24} color="#fbbf24" />
@@ -328,7 +326,6 @@ export default function EditCarScreen() {
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/* Images  */}
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
                 Car Images

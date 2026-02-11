@@ -44,7 +44,7 @@ export default function HomeScreen() {
       }
     }
     prepare();
-  }, []);
+  }, [user]);
 
   const FeaturedCarCard = ({ car }: { car: Car }) => (
     <TouchableOpacity
@@ -54,7 +54,6 @@ export default function HomeScreen() {
       style={{ width: width - 60 }}
     >
       <View className="bg-slate-800/50 rounded-3xl overflow-hidden border border-slate-700/30">
-        {/* Image */}
         <View className="relative h-64">
           <Image
             source={
@@ -67,14 +66,12 @@ export default function HomeScreen() {
           />
           <View className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
 
-          {/* Featured Badge */}
           <View className="absolute top-4 right-4 bg-accent px-3 py-1.5 rounded-full">
             <Text className="text-primary text-xs font-bold uppercase tracking-wider">
               Featured
             </Text>
           </View>
 
-          {/* Heart Button */}
           <TouchableOpacity
             className="absolute top-4 left-4 w-10 h-10 bg-slate-900/60 backdrop-blur-md rounded-full items-center justify-center border border-slate-700/50"
             onPress={() => toggleFavorite(user?.id || "", car.id)}
@@ -86,7 +83,6 @@ export default function HomeScreen() {
             />
           </TouchableOpacity>
 
-          {/* Bottom Info */}
           <View className="absolute bottom-0 left-0 right-0 p-6">
             <Text className="text-white text-2xl font-bold mb-1">
               {car.name}
@@ -97,7 +93,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Specs */}
         <View className="p-4 flex-row justify-between">
           <View className="flex-1">
             <Text className="text-slate-500 text-xs uppercase tracking-wider mb-1">
@@ -136,7 +131,6 @@ export default function HomeScreen() {
       style={{ width: CARD_WIDTH }}
     >
       <View className="bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700/30">
-        {/* Image */}
         <View className="relative h-32">
           <Image
             source={
@@ -149,7 +143,6 @@ export default function HomeScreen() {
           />
           <View className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
 
-          {/* Heart Button */}
           <TouchableOpacity
             className="absolute top-2 right-2 w-8 h-8 bg-slate-900/60 backdrop-blur-md rounded-full items-center justify-center"
             onPress={() => toggleFavorite(user?.id || "", car.id)}
@@ -161,13 +154,11 @@ export default function HomeScreen() {
             />
           </TouchableOpacity>
 
-          {/* Year Badge */}
           <View className="absolute bottom-2 left-2 bg-accent/90 px-2 py-0.5 rounded-md">
             <Text className="text-primary text-xs font-bold">{car.year}</Text>
           </View>
         </View>
 
-        {/* Info */}
         <View className="p-3">
           <Text
             className="text-slate-100 text-sm font-semibold mb-1"
@@ -179,7 +170,6 @@ export default function HomeScreen() {
             {formatPrice(car.price)}
           </Text>
 
-          {/* Quick Specs */}
           <View className="flex-row justify-between">
             <View className="flex-1">
               <Text className="text-slate-500 text-xs">{car.horsepower}</Text>
@@ -223,15 +213,13 @@ export default function HomeScreen() {
 
   const handleRefresh = async () => {
     await fetchCars();
-    await loadFavorites(user?.id || "");
+    if (user) await loadFavorites(user.id);
     setActiveSlide(0);
   };
 
   return (
     <SafeAreaView className="flex-1 bg-primary">
       <FlatList
-        // refreshing={isLoading}
-        // onRefresh={handleRefresh}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
@@ -267,7 +255,6 @@ export default function HomeScreen() {
         }
         ListHeaderComponent={
           <>
-            {/* Header */}
             <View className=" pt-4 pb-2 flex-row justify-between items-center">
               <View>
                 <Text className="text-slate-400 text-sm">Welcome back,</Text>
@@ -324,7 +311,6 @@ export default function HomeScreen() {
               snapToInterval={width - 60}
               snapToAlignment="start"
               decelerationRate="fast"
-              // contentContainerStyle={{ paddingRight: 20 }}
             />
 
             <CarouselDots />

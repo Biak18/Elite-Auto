@@ -19,7 +19,7 @@ const FormField = ({
   placeholder,
   handleChangeText,
   otherStyles,
-  iconName, // Add icon prop
+  iconName,
   ...props
 }: FormFieldProps) => {
   const [isFocused, setIsFocused] = useState(false);

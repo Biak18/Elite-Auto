@@ -169,7 +169,6 @@ const Search = () => {
           />
         </View>
 
-        {/* Filter Button */}
         <TouchableOpacity
           onPress={() => setShowFilters(!showFilters)}
           className={`w-12 h-12 rounded-xl items-center justify-center border ${
@@ -186,10 +185,8 @@ const Search = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Filter Panel */}
       {showFilters && (
         <View className="mx-4 px-6 mt-4 bg-slate-800/50 rounded-2xl p-4 border border-slate-700/30">
-          {/* Brand Filter */}
           <View className="mb-4">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
               Brand
@@ -219,7 +216,6 @@ const Search = () => {
             </ScrollView>
           </View>
 
-          {/* Reset Button */}
           {hasActiveFilters && (
             <TouchableOpacity
               onPress={resetFilters}
@@ -232,7 +228,6 @@ const Search = () => {
         </View>
       )}
 
-      {/* Category Tabs */}
       <View className="mt-4 mb-2">
         <ScrollView
           horizontal
@@ -266,7 +261,6 @@ const Search = () => {
         </ScrollView>
       </View>
 
-      {/* Active Filter Tags */}
       {hasActiveFilters && (
         <View className="px-6 flex-row flex-wrap gap-2 mt-2 mb-1">
           {selectedCategory !== "All" && (
@@ -298,7 +292,6 @@ const Search = () => {
         </View>
       )}
 
-      {/* Result Count */}
       <View className="px-6 py-2 flex-row justify-between items-center">
         <Text className="text-slate-400 text-sm">
           <Text className="text-accent font-bold">{filteredCars.length}</Text>{" "}
@@ -306,7 +299,6 @@ const Search = () => {
         </Text>
       </View>
 
-      {/* Results Grid */}
       {isSearching ? (
         <View className="flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="#fbbf24" />

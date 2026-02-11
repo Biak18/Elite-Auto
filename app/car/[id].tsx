@@ -7,6 +7,7 @@ import { useAppointmentStore } from "@/src/store/appointmentStore";
 import { useAuthStore } from "@/src/store/authStore";
 import { useCarStore } from "@/src/store/carStore";
 import { useFavoriteStore } from "@/src/store/favoriteStore";
+import { SellerProfile } from "@/src/types/interfaces";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -22,12 +23,12 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-interface SellerProfile {
-  id: string;
-  full_name: string;
-  phone: string | null;
-  avatarSignedUrl: string | null;
-}
+// interface SellerProfile {
+//   id: string;
+//   full_name: string;
+//   phone: string | null;
+//   avatarSignedUrl: string | null;
+// }
 
 export default function CarDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -53,6 +54,7 @@ export default function CarDetailScreen() {
 
   const canBookTestDrive =
     isBuyer && !isOwner && selectedCar?.available === true && !hasActiveBooking;
+
   const canEditCar = isSeller && isOwner;
 
   useEffect(() => {
@@ -82,7 +84,6 @@ export default function CarDetailScreen() {
     }
   }, [selectedCar]);
 
-  // Fetch seller profile
   useEffect(() => {
     const fetchSeller = async () => {
       if (!selectedCar?.owner_id || canEditCar) {
@@ -110,6 +111,7 @@ export default function CarDetailScreen() {
           id: data.id,
           full_name: data.full_name,
           phone: data.phone,
+          avatar_url: data.avatar_url,
           avatarSignedUrl,
         });
       } catch (err) {
@@ -127,7 +129,6 @@ export default function CarDetailScreen() {
     }
   }, [user, profile]);
 
-  // Call seller
   const handleCall = async () => {
     const phone = seller?.phone;
     if (!phone) return;
@@ -138,7 +139,6 @@ export default function CarDetailScreen() {
     }
   };
 
-  // Message seller
   const handleMessage = async () => {
     const phone = seller?.phone;
     if (!phone) return;
@@ -203,7 +203,6 @@ export default function CarDetailScreen() {
             },
           });
         } catch (error: any) {
-          console.error("Delete error:", error);
           showMessage(error.message || "Failed to delete car", "error");
         }
       },
@@ -247,7 +246,6 @@ export default function CarDetailScreen() {
   return (
     <SafeAreaView className="flex-1 bg-primary">
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Image */}
         <View className="relative">
           {selectedImage && (
             <Image
@@ -258,7 +256,6 @@ export default function CarDetailScreen() {
           )}
           <View className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
 
-          {/* Top Bar */}
           <View className="absolute top-4 left-0 right-0 flex-row justify-between items-center px-4">
             <TouchableOpacity
               onPress={() => router.back()}
@@ -279,7 +276,6 @@ export default function CarDetailScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Year Badge */}
           <View className="absolute bottom-4 left-4 bg-accent px-3 py-1.5 rounded-full">
             <Text className="text-primary text-sm font-bold">
               {selectedCar.year}
@@ -287,7 +283,6 @@ export default function CarDetailScreen() {
           </View>
         </View>
 
-        {/* Thumbnail Gallery */}
         {selectedCar.car_images && selectedCar.car_images.length > 0 && (
           <View className="px-6 mt-4">
             <FlatList
@@ -317,7 +312,6 @@ export default function CarDetailScreen() {
           </View>
         )}
 
-        {/* Car Info */}
         <View className="px-6 mt-6">
           <Text className="text-slate-400 text-sm uppercase tracking-wider">
             {selectedCar.brand}
@@ -333,7 +327,6 @@ export default function CarDetailScreen() {
             <Text className="text-slate-400 text-sm ml-2">total price</Text>
           </View>
 
-          {/* Quick Specs Grid */}
           <View className="flex-row flex-wrap gap-3 mb-6">
             <SpecCard
               title="Power"
@@ -357,7 +350,6 @@ export default function CarDetailScreen() {
             />
           </View>
 
-          {/* Description */}
           {selectedCar.description && (
             <View className="mb-6">
               <Text className="text-slate-100 text-lg font-semibold mb-3">
@@ -369,7 +361,6 @@ export default function CarDetailScreen() {
             </View>
           )}
 
-          {/* Full Specifications */}
           <View className="mb-6">
             <Text className="text-slate-100 text-lg font-semibold mb-4">
               Specifications
@@ -390,7 +381,6 @@ export default function CarDetailScreen() {
             </View>
           </View>
 
-          {/* Edit Car Button (Seller + Owner only) */}
           {canEditCar && (
             <View className="mb-8">
               <TouchableOpacity
@@ -415,7 +405,6 @@ export default function CarDetailScreen() {
             </View>
           )}
 
-          {/* Contact Seller (Buyers only, not owner) */}
           {!canEditCar && (
             <View className="mb-8">
               <Text className="text-slate-100 text-lg font-semibold mb-4">
@@ -524,7 +513,6 @@ export default function CarDetailScreen() {
         </View>
       )}
 
-      {/* Booking Modal */}
       <BookingModal
         visible={showBookingModal}
         onClose={() => setShowBookingModal(false)}
