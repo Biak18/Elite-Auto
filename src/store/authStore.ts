@@ -29,6 +29,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
 
   fetchProfile: async (userId: string) => {
+    if (!userId) {
+      console.warn("⚠️ Cannot fetch profile: userId is empty");
+      set({ profile: null });
+      return;
+    }
+
     const { data, error } = await supabase
       .from("profiles")
       .select("*")

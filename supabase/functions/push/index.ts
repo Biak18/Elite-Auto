@@ -20,13 +20,36 @@ Deno.serve(async (req) => {
 
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("push_token")
+      .select("push_token, notifications_enabled")
       .eq("id", userId)
       .single();
 
     if (profileError || !profile?.push_token) {
       console.error("No push token found:", profileError);
       throw new Error("No push token found for user");
+    }
+
+    if (profile.notifications_enabled === false) {
+      console.log("⏭️ User has disabled notifications, skipping send");
+
+      // Still save to database for in-app notification center
+      await supabase.from("notifications").insert({
+        user_id: userId,
+        title,
+        body,
+        data,
+      });
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: "User has notifications disabled",
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        },
+      );
     }
 
     console.log("Sending to Expo Push API...");
@@ -54,9 +77,8 @@ Deno.serve(async (req) => {
 
     const expoPushResult = await expoPushResponse.json();
 
-    console.log("✅ Expo response:", expoPushResult);
+    // console.log("✅ Expo response:", expoPushResult);
 
-    // Check for errors in Expo response
     if (expoPushResult.data && expoPushResult.data[0]?.status === "error") {
       console.error("❌ Expo Push error:", expoPushResult.data[0].message);
       throw new Error(expoPushResult.data[0].message);

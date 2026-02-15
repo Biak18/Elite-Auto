@@ -1,4 +1,5 @@
 import { TAB_BAR_HEIGHT } from "@/src/constants/layout";
+import { supabase } from "@/src/lib/supabase";
 import { showConfirm, showMessage } from "@/src/lib/utils/dialog";
 import { useAppointmentStore } from "@/src/store/appointmentStore";
 import { useAuthStore } from "@/src/store/authStore";
@@ -22,7 +23,10 @@ const Profile = () => {
   const isSeller = profile?.role === "seller";
   const favoriteCount = useFavoriteStore((state) => state.favoriteIds.size);
   const appointments = useAppointmentStore((state) => state.appointments);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(
+    profile?.notifications_enabled ?? true,
+  );
+
   // const [darkModeEnabled, setDarkModeEnabled] = useState(true);
   useEffect(() => {
     async function prepare() {
@@ -56,6 +60,33 @@ const Profile = () => {
         cancelText: "Cancel",
       },
     );
+  };
+
+  const handleToggleNotifications = async (value: boolean) => {
+    if (!user) return;
+    setNotificationsEnabled(value);
+
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ notifications_enabled: value })
+        .eq("id", user.id);
+
+      if (error) showMessage(error.message, "error");
+
+      await fetchProfile(user.id);
+
+      showMessage(
+        value
+          ? "Notifications enabled ✅"
+          : "Notifications disabled. You won't receive push notifications.",
+        "success",
+      );
+    } catch (error: any) {
+      setNotificationsEnabled(!value);
+      showMessage("Failed to update notification settings", "error");
+      console.error("Toggle notifications error:", error);
+    }
   };
 
   const MenuItem = ({
@@ -222,7 +253,7 @@ const Profile = () => {
             rightComponent={
               <Switch
                 value={notificationsEnabled}
-                onValueChange={setNotificationsEnabled}
+                onValueChange={handleToggleNotifications}
                 trackColor={{ false: "#334155", true: "#fbbf24" }}
                 thumbColor={notificationsEnabled ? "#fff" : "#94a3b8"}
               />

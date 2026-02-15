@@ -14,6 +14,10 @@ export interface Profile {
   gender: string | null;
   role: UserRole;
   profile_completed: boolean | null;
+  push_token: string | null;
+  notifications_enabled: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export type CarStatus = "pending" | "approved" | "rejected";

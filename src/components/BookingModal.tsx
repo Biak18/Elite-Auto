@@ -146,6 +146,7 @@ export default function BookingModal({
                 Preferred Date
               </Text>
               <TouchableOpacity
+                disabled={isSubmitting}
                 onPress={() => setShowDatePicker(true)}
                 className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/30 flex-row items-center justify-between"
               >
@@ -182,6 +183,7 @@ export default function BookingModal({
               <View className="flex-row flex-wrap gap-2">
                 {timeSlots.map((time) => (
                   <TouchableOpacity
+                    disabled={isSubmitting}
                     key={time}
                     onPress={() => setSelectedTime(time)}
                     className={`px-4 py-2 rounded-full border ${
@@ -209,6 +211,7 @@ export default function BookingModal({
                 Notes (Optional)
               </Text>
               <TextInput
+                readOnly={isSubmitting}
                 value={notes}
                 onChangeText={setNotes}
                 placeholder="Any specific requests or questions?"
