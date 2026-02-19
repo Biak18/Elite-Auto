@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Platform,
   RefreshControl,
   Text,
   TouchableOpacity,
@@ -343,7 +344,10 @@ export default function AppointmentsScreen() {
             onRefresh={() =>
               user && profile && fetchAppointments(isSeller, user.id)
             }
-            tintColor="#fbbf24"
+            {...(Platform.OS === "android" && {
+              colors: ["#fbbf24"],
+              progressBackgroundColor: "#020617",
+            })}
           />
         }
         ListEmptyComponent={

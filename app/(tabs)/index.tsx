@@ -23,6 +23,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
+const ITEM_WIDTH = width - 60;
+const ITEM_SPACING = 16;
+const SNAP_WIDTH = ITEM_WIDTH + ITEM_SPACING;
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -308,13 +311,18 @@ export default function HomeScreen() {
                 );
                 setActiveSlide(slideIndex);
               }}
-              scrollEventThrottle={16}
               showsHorizontalScrollIndicator={false}
+              scrollEventThrottle={16}
               removeClippedSubviews={false}
               pagingEnabled={false}
-              snapToInterval={width - 60}
+              snapToInterval={SNAP_WIDTH}
               snapToAlignment="start"
               decelerationRate="fast"
+              getItemLayout={(data, index) => ({
+                length: SNAP_WIDTH,
+                offset: SNAP_WIDTH * index,
+                index,
+              })}
             />
 
             <CarouselDots />
