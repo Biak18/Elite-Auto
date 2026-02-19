@@ -7,6 +7,7 @@ import { useFavoriteStore } from "@/src/store/favoriteStore";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Image,
   ScrollView,
@@ -26,7 +27,7 @@ const Profile = () => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     profile?.notifications_enabled ?? true,
   );
-
+  const { t } = useTranslation();
   // const [darkModeEnabled, setDarkModeEnabled] = useState(true);
   useEffect(() => {
     async function prepare() {
@@ -51,13 +52,13 @@ const Profile = () => {
 
   const handleSignOut = async () => {
     showConfirm(
-      "Are you sure you want to sign out?",
+      t("signOutConfirm"),
       async () => {
         await signOut();
       },
       {
-        confirmText: "Sign Out",
-        cancelText: "Cancel",
+        confirmText: t("signOut"),
+        cancelText: t("cancel"),
       },
     );
   };
@@ -155,10 +156,11 @@ const Profile = () => {
         contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
       >
         <View className="px-6 pt-4 pb-6">
-          <Text className="font-orbitron text-3xl text-accent mb-1">
-            Profile
+          <Text className="font-orbitron text-3xl text-accent mb-1 align-middle min-h-11">
+            {t("profile")}
           </Text>
-          <Text className="text-slate-400 text-sm">Manage your account</Text>
+          {/* <Text className="text-slate-400 text-sm">Manage your account</Text> */}
+          <Text className="text-slate-400 text-sm">{t("manageAccount")}</Text>
         </View>
 
         <View className="mx-6 mb-6">
@@ -223,15 +225,15 @@ const Profile = () => {
           </Text>
           <MenuItem
             icon="person-outline"
-            title="Edit Profile"
-            subtitle="Update your personal information"
+            title={t("editProfile")}
+            subtitle={t("subtitle.profile")}
             onPress={() => router.push("/edit-profile")}
           />
           <MenuItem
             icon="lock-closed-outline"
-            title="Change Password"
-            subtitle="Update your password"
-            onPress={() => showMessage("Change Password")}
+            title={t("changePassword")}
+            subtitle={t("subtitle.password")}
+            onPress={() => router.push("/change-password")}
           />
           {/* <MenuItem
             icon="card-outline"
@@ -247,8 +249,8 @@ const Profile = () => {
           </Text>
           <MenuItem
             icon="notifications-outline"
-            title="Notifications"
-            subtitle="Push notifications"
+            title={t("pushNotifications")}
+            subtitle={t("subtitle.noti")}
             showArrow={false}
             rightComponent={
               <Switch
@@ -275,9 +277,9 @@ const Profile = () => {
           /> */}
           <MenuItem
             icon="language-outline"
-            title="Language"
-            subtitle="English (US)"
-            onPress={() => showMessage("Language")}
+            title={t("language")}
+            subtitle={t("subtitle.lang")}
+            onPress={() => router.push("/language")}
           />
         </View>
 
@@ -321,7 +323,7 @@ const Profile = () => {
           >
             <Ionicons name="log-out-outline" size={22} color="#ef4444" />
             <Text className="text-red-500 font-bold text-base ml-2">
-              Sign Out
+              {t("signOut")}
             </Text>
           </TouchableOpacity>
         </View>

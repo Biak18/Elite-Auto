@@ -5,6 +5,7 @@ import { Car } from "@/src/types/interfaces";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -18,6 +19,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SellerDashboard() {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const { isLoading, sellerCars, getCarByOwnerId } = useCarStore();
 
@@ -77,7 +79,7 @@ export default function SellerDashboard() {
 
           <View className="flex-1 p-4 justify-between">
             <View className="flex-row justify-between items-start">
-              <View className="w-36">
+              <View className="w-3/5">
                 <Text className="text-slate-400 text-xs uppercase tracking-wider">
                   {item.brand}
                 </Text>
@@ -95,7 +97,7 @@ export default function SellerDashboard() {
                 <Text
                   className={`${status.text} text-xs font-semibold capitalize`}
                 >
-                  {item.status}
+                  {t(item.status)}
                 </Text>
               </View>
             </View>
@@ -152,11 +154,11 @@ export default function SellerDashboard() {
           <>
             <View className="pt-4 pb-2 flex-row justify-between items-end">
               <View>
-                <Text className="font-orbitron text-3xl text-accent mb-1">
-                  My Cars
+                <Text className="font-orbitron text-3xl text-accent mb-1 align-middle min-h-11">
+                  {t("myCars")}
                 </Text>
                 <Text className="text-slate-400 text-sm">
-                  Manage your listings
+                  {t("manageListings")}
                 </Text>
               </View>
 
@@ -173,19 +175,25 @@ export default function SellerDashboard() {
                 <Text className="text-accent text-xl font-bold">
                   {sellerCars.filter((c) => c.status === "approved").length}
                 </Text>
-                <Text className="text-slate-400 text-xs mt-1">Approved</Text>
+                <Text className="text-slate-400 text-xs mt-1 align-middle h-4">
+                  {t("approved")}
+                </Text>
               </View>
               <View className="flex-1 bg-slate-800/50 rounded-xl p-3 border border-slate-700/30 items-center">
                 <Text className="text-yellow-400 text-xl font-bold">
                   {sellerCars.filter((c) => c.status === "pending").length}
                 </Text>
-                <Text className="text-slate-400 text-xs mt-1">Pending</Text>
+                <Text className="text-slate-400 text-xs mt-1  align-middle h-4">
+                  {t("pending")}
+                </Text>
               </View>
               <View className="flex-1 bg-slate-800/50 rounded-xl p-3 border border-slate-700/30 items-center">
                 <Text className="text-red-400 text-xl font-bold">
                   {sellerCars.filter((c) => c.status === "rejected").length}
                 </Text>
-                <Text className="text-slate-400 text-xs mt-1">Rejected</Text>
+                <Text className="text-slate-400 text-xs mt-1  align-middle h-4">
+                  {t("rejected")}
+                </Text>
               </View>
             </View>
           </>
@@ -196,17 +204,17 @@ export default function SellerDashboard() {
               <Ionicons name="car-sport-outline" size={48} color="#475569" />
             </View>
             <Text className="font-orbitron text-lg text-slate-300 mt-6">
-              No Cars Yet
+              {t("noCarsYet")}
             </Text>
             <Text className="text-slate-500 text-sm mt-2 text-center leading-5">
-              Tap the + button to add your first car
+              {t("addFirstCar")}
             </Text>
             <TouchableOpacity
               className="mt-6 bg-accent px-8 py-3 rounded-xl flex-row items-center"
               onPress={() => router.push("/seller/add-car")}
             >
               <Ionicons name="add" size={18} color="#020617" />
-              <Text className="text-primary font-bold ml-2">Add Car</Text>
+              <Text className="text-primary font-bold ml-2">{t("addCar")}</Text>
             </TouchableOpacity>
           </View>
         }

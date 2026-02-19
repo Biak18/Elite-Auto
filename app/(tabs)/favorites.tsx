@@ -7,6 +7,7 @@ import { Car } from "@/src/types/interfaces";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Dimensions,
@@ -22,6 +23,7 @@ const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 52) / 2; // 2 cards per row
 
 const Favorite = () => {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const { isLoading, favoriteIds, loadFavorites, toggleFavorite } =
     useFavoriteStore();
@@ -119,10 +121,10 @@ const Favorite = () => {
     <SafeAreaView className="flex-1 bg-primary">
       <View className="px-6 pt-4 pb-4 flex-row justify-between items-end">
         <View>
-          <Text className="font-orbitron text-3xl text-accent mb-1">
-            Favorites
+          <Text className="font-orbitron text-3xl text-accent mb-1 align-middle min-h-11">
+            {t("savedCars")}
           </Text>
-          <Text className="text-slate-400 text-sm">Your saved collection</Text>
+          <Text className="text-slate-400 text-sm">{t("saveCollection")}</Text>
         </View>
 
         {favoriteCars.length > 0 && (
@@ -152,10 +154,10 @@ const Favorite = () => {
             </View>
 
             <Text className="font-orbitron text-lg text-slate-300 mt-6">
-              No Favorites Yet
+              {t("noFavoritesYet")}
             </Text>
             <Text className="text-slate-500 text-sm mt-2 text-center leading-5">
-              Tap the heart icon on any car to save it to your collection
+              {t("saveGuide")}
             </Text>
 
             <TouchableOpacity
@@ -163,7 +165,9 @@ const Favorite = () => {
               onPress={() => router.push("/(tabs)")}
             >
               <Ionicons name="car-sport-outline" size={18} color="#020617" />
-              <Text className="text-primary font-bold ml-2">Browse Cars</Text>
+              <Text className="text-primary font-bold ml-2">
+                {t("browseCars")}
+              </Text>
             </TouchableOpacity>
           </View>
         }

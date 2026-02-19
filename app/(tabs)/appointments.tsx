@@ -8,6 +8,7 @@ import { useAuthStore } from "@/src/store/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -20,6 +21,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AppointmentsScreen() {
+  const { t } = useTranslation();
   const { user, profile } = useAuthStore();
   const { appointments, profiles, isLoading, fetchAppointments } =
     useAppointmentStore();
@@ -171,7 +173,7 @@ export default function AppointmentsScreen() {
                 <Text
                   className={`${statusStyle.text} text-xs font-semibold capitalize`}
                 >
-                  {item.status}
+                  {t(item.status)}
                 </Text>
               </View>
             </View>
@@ -224,7 +226,7 @@ export default function AppointmentsScreen() {
                 >
                   <Ionicons name="checkmark-circle" size={16} color="#4ade80" />
                   <Text className="text-green-400 font-semibold ml-1 text-sm">
-                    Confirm
+                    {t("confirm")}
                   </Text>
                 </TouchableOpacity>
 
@@ -234,7 +236,7 @@ export default function AppointmentsScreen() {
                 >
                   <Ionicons name="close-circle" size={16} color="#f87171" />
                   <Text className="text-red-400 font-semibold ml-1 text-sm">
-                    Decline
+                    {t("decline")}
                   </Text>
                 </TouchableOpacity>
               </>
@@ -245,7 +247,7 @@ export default function AppointmentsScreen() {
               >
                 <Ionicons name="close-circle" size={16} color="#f87171" />
                 <Text className="text-red-400 font-semibold ml-1 text-sm">
-                  Cancel Booking
+                  {t("cancelBooking")}
                 </Text>
               </TouchableOpacity>
             )}
@@ -260,7 +262,7 @@ export default function AppointmentsScreen() {
             >
               <Ionicons name="checkmark-done" size={16} color="#60a5fa" />
               <Text className="text-blue-400 font-semibold ml-1 text-sm">
-                Mark as Completed
+                {t("markAsCompleted")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -282,13 +284,11 @@ export default function AppointmentsScreen() {
   return (
     <SafeAreaView className="flex-1 bg-primary">
       <View className="px-6 pt-4 pb-2">
-        <Text className="font-orbitron text-3xl text-accent mb-1">
-          Bookings
+        <Text className="font-orbitron text-3xl text-accent mb-1 align-middle min-h-11">
+          {t("bookings")}
         </Text>
         <Text className="text-slate-400 text-sm">
-          {isSeller
-            ? "Manage test drive requests"
-            : "Your test drive appointments"}
+          {isSeller ? t("manageTestDrives") : t("yourAppointments")}
         </Text>
       </View>
 
@@ -306,7 +306,7 @@ export default function AppointmentsScreen() {
               activeTab === "upcoming" ? "text-primary" : "text-slate-300"
             }`}
           >
-            Upcoming ({upcomingAppointments.length})
+            {t("upcoming")} ({upcomingAppointments.length})
           </Text>
         </TouchableOpacity>
 
@@ -323,7 +323,7 @@ export default function AppointmentsScreen() {
               activeTab === "past" ? "text-primary" : "text-slate-300"
             }`}
           >
-            Past ({pastAppointments.length})
+            {t("past")} ({pastAppointments.length})
           </Text>
         </TouchableOpacity>
       </View>
@@ -352,12 +352,14 @@ export default function AppointmentsScreen() {
               <Ionicons name="calendar-outline" size={48} color="#475569" />
             </View>
             <Text className="font-orbitron text-lg text-slate-300 mt-6">
-              No {activeTab} bookings
+              {activeTab === "upcoming"
+                ? t("noUpcomingBookings")
+                : t("noPastBookings")}
             </Text>
             <Text className="text-slate-500 text-sm mt-2 text-center">
               {activeTab === "upcoming"
-                ? "Book a test drive to get started"
-                : "Your past bookings will appear here"}
+                ? t("bookTestDriveToStart")
+                : t("pastBookingsAppear")}
             </Text>
           </View>
         }

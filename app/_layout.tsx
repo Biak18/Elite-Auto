@@ -1,4 +1,5 @@
 import AnimatedSplash from "@/src/components/splashscreen/SplashScreen";
+import "@/src/lib/i18n";
 import { useAuthStore } from "@/src/store/authStore";
 import MessageBox from "@/src/widgets/MessageBox";
 import {

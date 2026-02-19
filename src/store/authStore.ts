@@ -1,6 +1,7 @@
 import { supabase } from "@/src/lib/supabase";
 import { authService } from "@/src/services/authService";
 import { Session, User } from "@supabase/supabase-js";
+import { router } from "expo-router";
 import { create } from "zustand";
 import { notificationService } from "../services/notificationService";
 import { Profile } from "../types/interfaces";
@@ -79,6 +80,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     if (user) {
       await get().fetchProfile(user.id);
+      // Register for push notifications
       try {
         const token = await notificationService.registerForPushNotifications();
         if (token) {
@@ -92,6 +94,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: false });
 
     supabase.auth.onAuthStateChange(async (event, newSession) => {
+      if (event === "PASSWORD_RECOVERY") {
+        console.log("🔑 Password recovery detected");
+        router.replace("/change-password");
+        return;
+      }
+
       if (event === "SIGNED_IN") {
         set({ isLoading: true });
         const newUser = newSession?.user ?? null;

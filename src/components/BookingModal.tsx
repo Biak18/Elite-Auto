@@ -4,6 +4,7 @@ import { useAuthStore } from "@/src/store/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Modal,
   Platform,
@@ -13,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { showMessage } from "../lib/utils/dialog";
 import { formatTime } from "../lib/utils/formatters";
 import { notifications } from "../lib/utils/notifications";
@@ -35,6 +37,8 @@ export default function BookingModal({
   sellerId,
   onSuccess,
 }: BookingModalProps) {
+  const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -98,7 +102,7 @@ export default function BookingModal({
       }
 
       showMessage(
-        "Booking Sent! \n Your test drive request has been sent. The seller will contact you soon.",
+        `${t("bookingSent")} \n ${t("bookingSentMessage")}`,
         "success",
         {
           onClose: () => {
@@ -121,7 +125,7 @@ export default function BookingModal({
         <View className="bg-secondary rounded-t-3xl max-h-[85%]">
           <View className="flex-row justify-between items-center p-6 border-b border-slate-700/50">
             <Text className="text-xl font-orbitron text-accent">
-              Book Test Drive
+              {t("bookingTitle")}
             </Text>
             <TouchableOpacity onPress={onClose}>
               <Ionicons name="close" size={24} color="#fbbf24" />
@@ -134,7 +138,7 @@ export default function BookingModal({
           >
             <View className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/30 mb-6">
               <Text className="text-slate-400 text-xs uppercase tracking-wider mb-1">
-                Test Drive For
+                {t("testDriveFor")}
               </Text>
               <Text className="text-white text-lg font-semibold">
                 {carName}
@@ -143,7 +147,7 @@ export default function BookingModal({
 
             <View className="mb-6">
               <Text className="text-slate-400 text-xs uppercase tracking-wider mb-3">
-                Preferred Date
+                {t("preferredDate")}
               </Text>
               <TouchableOpacity
                 disabled={isSubmitting}
@@ -178,7 +182,7 @@ export default function BookingModal({
 
             <View className="mb-6">
               <Text className="text-slate-400 text-xs uppercase tracking-wider mb-3">
-                Preferred Time
+                {t("preferredTime")}
               </Text>
               <View className="flex-row flex-wrap gap-2">
                 {timeSlots.map((time) => (
@@ -208,13 +212,13 @@ export default function BookingModal({
 
             <View className="mb-6">
               <Text className="text-slate-400 text-xs uppercase tracking-wider mb-3">
-                Notes (Optional)
+                {t("notesOptional")}
               </Text>
               <TextInput
                 readOnly={isSubmitting}
                 value={notes}
                 onChangeText={setNotes}
-                placeholder="Any specific requests or questions?"
+                placeholder={t("notesPlaceholder")}
                 placeholderTextColor="#64748b"
                 multiline
                 numberOfLines={4}
@@ -226,11 +230,12 @@ export default function BookingModal({
             <TouchableOpacity
               onPress={handleSubmit}
               disabled={isSubmitting}
-              className="bg-accent rounded-xl py-4 flex-row items-center justify-center mb-4"
+              className="bg-accent rounded-xl py-4 flex-row items-center justify-center"
+              style={{ marginBottom: Math.max(insets.bottom, 16) }}
             >
               <Ionicons name="checkmark-circle" size={20} color="#020617" />
               <Text className="text-primary font-bold text-base ml-2">
-                {isSubmitting ? "Sending..." : "Send Booking Request"}
+                {isSubmitting ? t("sending") : t("sendBookingRequest")}
               </Text>
             </TouchableOpacity>
           </ScrollView>

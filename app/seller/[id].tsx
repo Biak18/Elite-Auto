@@ -11,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
@@ -24,6 +25,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EditCarScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useAuthStore();
   const {
@@ -293,7 +295,7 @@ export default function EditCarScreen() {
           .eq("id", carId);
       }
 
-      showMessage("Your car has been updated successfully.", "success", {
+      showMessage(t("carUpdatedMessage"), "success", {
         onClose: () => {
           if (user) {
             getCarByOwnerId(user.id);
@@ -328,7 +330,7 @@ export default function EditCarScreen() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-                Car Images
+                {t("carImages")}
               </Text>
 
               <View className="flex-row flex-wrap gap-3">
@@ -375,17 +377,17 @@ export default function EditCarScreen() {
               </View>
 
               <Text className="text-slate-500 text-xs mt-3">
-                Tap an image to set as primary. Max 6 images.
+                {t("tapToSetPrimary")}
               </Text>
             </View>
 
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-                Basic Information
+                {t("basicInformation")}
               </Text>
 
               <FormField
-                title="Car Name"
+                title={t("carName")}
                 value={form.name}
                 placeholder="e.g. 911 GT3"
                 handleChangeText={(text) => setForm({ ...form, name: text })}
@@ -393,7 +395,7 @@ export default function EditCarScreen() {
               />
 
               <FormField
-                title="Brand"
+                title={t("brand")}
                 value={form.brand}
                 placeholder="e.g. Porsche"
                 handleChangeText={(text) => setForm({ ...form, brand: text })}
@@ -402,7 +404,7 @@ export default function EditCarScreen() {
               />
 
               <FormField
-                title="Model"
+                title={t("model")}
                 value={form.model}
                 placeholder="e.g. 911"
                 handleChangeText={(text) => setForm({ ...form, model: text })}
@@ -413,7 +415,7 @@ export default function EditCarScreen() {
               <View className="flex-row gap-4 mt-4">
                 <View className="flex-1">
                   <FormField
-                    title="Year"
+                    title={t("year")}
                     value={form.year}
                     placeholder="2024"
                     handleChangeText={(text) =>
@@ -425,7 +427,7 @@ export default function EditCarScreen() {
                 </View>
                 <View className="flex-1">
                   <FormField
-                    title="Seats"
+                    title={t("seats")}
                     value={form.seats}
                     placeholder="5"
                     handleChangeText={(text) =>
@@ -440,11 +442,11 @@ export default function EditCarScreen() {
 
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-                Pricing
+                {t("pricing")}
               </Text>
 
               <FormField
-                title="Price (USD)"
+                title={t("price")}
                 value={form.price}
                 placeholder="e.g. 185000"
                 handleChangeText={(text) => setForm({ ...form, price: text })}
@@ -455,13 +457,13 @@ export default function EditCarScreen() {
 
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-                Specifications
+                {t("specifications")}
               </Text>
 
               <DropdownPicker
-                title="Car Type"
+                title={t("carType")}
                 value={form.type}
-                placeholder="Select car type"
+                placeholder={t("selectCarType")}
                 options={typeOptions}
                 iconName="car-sport-outline"
                 showPicker={showTypePicker}
@@ -478,9 +480,9 @@ export default function EditCarScreen() {
 
               <View className="mt-4">
                 <DropdownPicker
-                  title="Fuel Type"
+                  title={t("fuelType")}
                   value={form.fuelType}
-                  placeholder="Select fuel type"
+                  placeholder={t("selectFuelType")}
                   options={fuelOptions}
                   iconName="water-outline"
                   showPicker={showFuelPicker}
@@ -498,7 +500,7 @@ export default function EditCarScreen() {
 
               <View className="mt-4">
                 <DropdownPicker
-                  title="Transmission"
+                  title={t("transmission")}
                   value={form.transmission}
                   placeholder="Select transmission"
                   options={transmissionOptions}
@@ -517,7 +519,7 @@ export default function EditCarScreen() {
               </View>
 
               <FormField
-                title="Horsepower"
+                title={t("horsepower")}
                 value={form.horsepower}
                 placeholder="e.g. 450 HP"
                 handleChangeText={(text) =>
@@ -528,7 +530,7 @@ export default function EditCarScreen() {
               />
 
               <FormField
-                title="0-60 mph"
+                title={t("acceleration")}
                 value={form.acceleration}
                 placeholder="e.g. 3.5s"
                 handleChangeText={(text) =>
@@ -541,11 +543,11 @@ export default function EditCarScreen() {
 
             <View className="px-6 mt-6">
               <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-                Description
+                {t("description")}
               </Text>
 
               <Text className="text-base text-gray-300 font-medium mb-2">
-                About This Car
+                {t("aboutThisCarField")}
               </Text>
               <View
                 className="w-full px-4 py-3 bg-slate-900/60 rounded-2xl border border-slate-600"
@@ -554,7 +556,7 @@ export default function EditCarScreen() {
                 <FormField
                   title=""
                   value={form.description}
-                  placeholder="Describe the car..."
+                  placeholder={t("describeTheCar")}
                   handleChangeText={(text) =>
                     setForm({ ...form, description: text })
                   }
@@ -577,7 +579,7 @@ export default function EditCarScreen() {
                   color="#020617"
                 />
                 <Text className="text-primary font-bold text-lg ml-2">
-                  {isLoading ? "Updating..." : "Update Car"}
+                  {isLoading ? t("updating") : t("updateCar")}
                 </Text>
               </TouchableOpacity>
             </View>

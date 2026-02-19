@@ -7,6 +7,7 @@ import { Car } from "@/src/types/interfaces";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Dimensions,
@@ -24,6 +25,7 @@ const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const { profile, user } = useAuthStore();
   const {
     isLoading: isLoadingFavorite,
@@ -257,7 +259,9 @@ export default function HomeScreen() {
           <>
             <View className=" pt-4 pb-2 flex-row justify-between items-center">
               <View>
-                <Text className="text-slate-400 text-sm">Welcome back,</Text>
+                <Text className="text-slate-400 text-sm">
+                  {t("homeWelcomBack")}
+                </Text>
                 <Text className="font-orbitron text-2xl text-accent">
                   {profile?.full_name || "Elite Member"}
                 </Text>
@@ -282,11 +286,11 @@ export default function HomeScreen() {
 
             <View className="mt-5 mb-4 flex-row justify-between items-center">
               <Text className="text-slate-100 text-lg font-semibold">
-                Featured Collection
+                {t("featuredCars")}
               </Text>
               <View className="bg-accent px-3 py-1 rounded-full">
                 <Text className="text-primary text-xs font-bold uppercase tracking-wider">
-                  New
+                  {t("new")}
                 </Text>
               </View>
             </View>
@@ -315,15 +319,15 @@ export default function HomeScreen() {
 
             <CarouselDots />
 
-            <View className="px-6 mt-5 mb-4 flex-row justify-between items-center">
+            <View className="mt-5 mb-4 flex-row justify-between items-center">
               <Text className="text-slate-100 text-lg font-semibold">
-                Browse Collection
+                {t("browseCollection")}
               </Text>
               <TouchableOpacity
                 className="flex-row items-center"
                 onPress={() => router.push("/(tabs)/search")}
               >
-                <Text className="text-accent text-sm mr-1">View All</Text>
+                <Text className="text-accent text-sm mr-1">{t("viewAll")}</Text>
                 <Ionicons name="arrow-forward" size={16} color="#fbbf24" />
               </TouchableOpacity>
             </View>

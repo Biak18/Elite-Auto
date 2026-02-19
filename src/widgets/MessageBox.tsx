@@ -13,6 +13,7 @@ const MessageBox = () => {
     hideMessage,
     onConfirm,
     onCancel,
+    onClose,
     confirmText,
     cancelText,
   } = useUIStore();
@@ -52,6 +53,23 @@ const MessageBox = () => {
       onCancel();
     }
     hideMessage();
+  };
+
+  const handleOK = async () => {
+    if (onClose) {
+      setIsLoading(true);
+      try {
+        await onClose();
+        hideMessage();
+      } catch (error) {
+        console.error("Close action failed:", error);
+        hideMessage();
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      hideMessage();
+    }
   };
 
   const icon = getIcon();
@@ -106,12 +124,17 @@ const MessageBox = () => {
             </View>
           ) : (
             <TouchableOpacity
-              onPress={hideMessage}
-              className="mt-6 bg-accent rounded-xl py-3"
+              onPress={handleOK}
+              disabled={isLoading}
+              className="mt-6 bg-accent rounded-xl py-3 flex-row items-center justify-center min-h-[48px]"
             >
-              <Text className="text-center text-primary font-bold text-base">
-                OK
-              </Text>
+              {isLoading ? (
+                <ActivityIndicator color="#020617" size="small" />
+              ) : (
+                <Text className="text-center text-primary font-bold text-base">
+                  OK
+                </Text>
+              )}
             </TouchableOpacity>
           )}
         </View>

@@ -8,6 +8,7 @@ import { Car } from "@/src/types/interfaces";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Dimensions,
@@ -24,6 +25,7 @@ const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 52) / 2;
 
 const Search = () => {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const { allCars, fetchCars } = useCarStore();
   const { favoriteIds, toggleFavorite } = useFavoriteStore();
@@ -156,15 +158,17 @@ const Search = () => {
   return (
     <SafeAreaView className="bg-primary flex-1">
       <View className="px-6 pt-4 pb-2">
-        <Text className="font-orbitron text-3xl text-accent mb-1">Search</Text>
-        <Text className="text-slate-400 text-sm">Find your dream car</Text>
+        <Text className="font-orbitron text-3xl text-accent mb-1 align-middle min-h-11">
+          {t("searchCars")}
+        </Text>
+        <Text className="text-slate-400 text-sm">{t("findYourDreamCar")}</Text>
       </View>
 
       <View className="px-6 flex-row items-center gap-3 mt-2">
         <View className="flex-1">
           <SearchInput
             value={searchQuery}
-            placeholder="Search by name or brand..."
+            placeholder={t("searchPlaceholder")}
             onChangeText={(text: string) => setSearchQuery(text)}
           />
         </View>
@@ -321,10 +325,10 @@ const Search = () => {
                 <Ionicons name="search-outline" size={48} color="#475569" />
               </View>
               <Text className="font-orbitron text-lg text-slate-300 mt-6">
-                No Results
+                {t("noResultsFound")}
               </Text>
               <Text className="text-slate-500 text-sm mt-2 text-center leading-5">
-                Try adjusting your search or filters
+                {t("tryDifferentFilters")}
               </Text>
               <TouchableOpacity
                 className="mt-6 bg-accent px-8 py-3 rounded-xl flex-row items-center"

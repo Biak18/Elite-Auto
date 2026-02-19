@@ -11,6 +11,7 @@ import { SellerProfile } from "@/src/types/interfaces";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -31,6 +32,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // }
 
 export default function CarDetailScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user, profile } = useAuthStore();
   const { favoriteIds, toggleFavorite, loadFavorites } = useFavoriteStore();
@@ -153,7 +155,7 @@ export default function CarDetailScreen() {
     if (!selectedCar) return;
 
     showConfirm(
-      `Delete ${selectedCar.name}?\n\nThis will permanently remove:\n• The listing\n• All images\n• All appointments\n\nThis action cannot be undone.`,
+      t("deleteConfirm", { name: selectedCar.name }),
       async () => {
         try {
           const getStoragePath = (url: string) => {
@@ -207,8 +209,8 @@ export default function CarDetailScreen() {
         }
       },
       {
-        confirmText: "Delete Forever",
-        cancelText: "Keep Car",
+        confirmText: t("deleteForever"),
+        cancelText: t("keepCar"),
       },
     );
   };
@@ -329,22 +331,22 @@ export default function CarDetailScreen() {
 
           <View className="flex-row flex-wrap gap-3 mb-6">
             <SpecCard
-              title="Power"
+              title={t("power")}
               icon="speedometer-outline"
               value={selectedCar.horsepower}
             />
             <SpecCard
-              title="0-60 mph"
+              title={t("acceleration")}
               icon="flash-outline"
               value={selectedCar.acceleration}
             />
             <SpecCard
-              title="Type"
+              title={t("type")}
               icon="car-sport-outline"
               value={selectedCar.type}
             />
             <SpecCard
-              title="Fuel"
+              title={t("fuel")}
               icon="water-outline"
               value={selectedCar.fuel_type}
             />
@@ -353,7 +355,7 @@ export default function CarDetailScreen() {
           {selectedCar.description && (
             <View className="mb-6">
               <Text className="text-slate-100 text-lg font-semibold mb-3">
-                About This Car
+                {t("aboutThisCar")}
               </Text>
               <Text className="text-slate-400 text-base leading-6">
                 {selectedCar.description}
@@ -363,18 +365,21 @@ export default function CarDetailScreen() {
 
           <View className="mb-6">
             <Text className="text-slate-100 text-lg font-semibold mb-4">
-              Specifications
+              {t("specifications")}
             </Text>
             <View className="bg-slate-800/50 rounded-2xl border border-slate-700/30 overflow-hidden">
-              <SpecRow label="Transmission" value={selectedCar.transmission} />
               <SpecRow
-                label="Seats"
+                label={t("transmission")}
+                value={selectedCar.transmission}
+              />
+              <SpecRow
+                label={t("seats")}
                 value={`${selectedCar.seats} Passengers`}
               />
-              <SpecRow label="Fuel Type" value={selectedCar.fuel_type} />
-              <SpecRow label="Body Type" value={selectedCar.type} />
+              <SpecRow label={t("fuelType")} value={selectedCar.fuel_type} />
+              <SpecRow label={t("bodyType")} value={selectedCar.type} />
               <SpecRow
-                label="Year"
+                label={t("year")}
                 value={selectedCar.year.toString()}
                 isLast
               />
@@ -388,7 +393,7 @@ export default function CarDetailScreen() {
                 className="bg-accent/10 border border-accent/30 rounded-2xl py-4 items-center"
               >
                 <Text className="text-accent font-bold text-lg">
-                  Edit Car Listing
+                  {t("editCarListing")}
                 </Text>
               </TouchableOpacity>
 
@@ -399,7 +404,7 @@ export default function CarDetailScreen() {
               >
                 <Ionicons name="trash-outline" size={22} color="#ef4444" />
                 <Text className="text-red-400 font-bold text-lg ml-2">
-                  Delete Car
+                  {t("deleteCar")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -408,7 +413,7 @@ export default function CarDetailScreen() {
           {!canEditCar && (
             <View className="mb-8">
               <Text className="text-slate-100 text-lg font-semibold mb-4">
-                Interested?
+                {t("interested")}
               </Text>
               <View className="bg-slate-800/50 rounded-2xl p-5 border border-slate-700/30">
                 <View className="flex-row items-center mb-4">
@@ -456,7 +461,7 @@ export default function CarDetailScreen() {
                     <Text
                       className={`font-semibold ml-2 ${seller?.phone ? "text-accent" : "text-slate-500"}`}
                     >
-                      Call
+                      {t("call")}
                     </Text>
                   </TouchableOpacity>
 
@@ -477,7 +482,7 @@ export default function CarDetailScreen() {
                     <Text
                       className={`font-semibold ml-2 ${seller?.phone ? "text-accent" : "text-slate-500"}`}
                     >
-                      Message
+                      {t("message")}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -496,7 +501,7 @@ export default function CarDetailScreen() {
             >
               <Ionicons name="checkmark-circle" size={20} color="#eab308" />
               <Text className="text-yellow-400 font-bold text-lg ml-2">
-                View Your Booking
+                {t("viewYourBooking")}
               </Text>
             </TouchableOpacity>
           ) : (
@@ -506,7 +511,7 @@ export default function CarDetailScreen() {
             >
               <Ionicons name="calendar" size={20} color="#020617" />
               <Text className="text-primary font-bold text-lg ml-2">
-                Book Test Drive
+                {t("bookTestDrive")}
               </Text>
             </TouchableOpacity>
           )}

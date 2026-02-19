@@ -4,7 +4,7 @@ export const showMessage = (
   message: string,
   type?: "info" | "success" | "error" | "warning",
   options?: {
-    onClose?: () => void;
+    onClose?: () => void | Promise<void>;
   },
 ) => {
   useUIStore.getState().showMessage(message, type, options?.onClose);

@@ -5,10 +5,12 @@ import { useAuthStore } from "@/src/store/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CompleteProfile() {
+  const { t } = useTranslation();
   const { user, profile, fetchProfile } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState<"buyer" | "seller" | null>(
@@ -55,17 +57,17 @@ export default function CompleteProfile() {
 
   const handleComplete = async () => {
     if (!form.fullName.trim()) {
-      showMessage("Full name is required");
+      showMessage(t("requiredField", { name: t("fullName") }));
       return;
     }
 
     if (!selectedRole) {
-      showMessage("Please select your role");
+      showMessage(t("selectRole"));
       return;
     }
 
     if (!form.phone.trim()) {
-      showMessage("Phone number is required");
+      showMessage(t("requiredField", { name: t("phoneNumber") }));
       return;
     }
 
@@ -98,12 +100,10 @@ export default function CompleteProfile() {
     <SafeAreaView className="flex-1 bg-primary">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="px-6 pt-6 pb-4">
-          <Text className="font-orbitron text-3xl text-accent mb-2">
-            Complete Your Profile
+          <Text className="font-orbitron text-3xl text-accent mb-2 pt-2">
+            {t("completeProfiel")}
           </Text>
-          <Text className="text-slate-400 text-sm">
-            Just a few more details to get started
-          </Text>
+          <Text className="text-slate-400 text-sm">{t("fewMoreDetail")}</Text>
         </View>
 
         <View className="items-center py-6">
@@ -118,7 +118,7 @@ export default function CompleteProfile() {
 
         <View className="px-6 mb-6">
           <Text className="text-slate-300 text-base font-semibold mb-3">
-            I want to:
+            {t("iWantTo")}
           </Text>
           <View className="flex-row gap-3">
             <TouchableOpacity
@@ -139,10 +139,10 @@ export default function CompleteProfile() {
                   selectedRole === "buyer" ? "text-accent" : "text-slate-300"
                 }`}
               >
-                Buy Cars
+                {t("category.buy.main")}
               </Text>
               <Text className="text-slate-400 text-xs mt-1">
-                Browse and purchase vehicles
+                {t("category.buy.sub")}
               </Text>
             </TouchableOpacity>
 
@@ -164,10 +164,10 @@ export default function CompleteProfile() {
                   selectedRole === "seller" ? "text-accent" : "text-slate-300"
                 }`}
               >
-                Sell Cars
+                {t("category.sell.main")}
               </Text>
               <Text className="text-slate-400 text-xs mt-1">
-                List vehicles for sale
+                {t("category.sell.sub")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -175,15 +175,15 @@ export default function CompleteProfile() {
 
         <View className="px-6 gap-4">
           <FormField
-            title="Full Name"
+            title={t("fullName")}
             value={form.fullName}
-            placeholder="Enter your full name"
+            placeholder={t("fullNamePlaceHolder")}
             handleChangeText={(text) => setForm({ ...form, fullName: text })}
             iconName="person-outline"
           />
 
           <FormField
-            title="Phone Number"
+            title={t("phoneNumber")}
             value={form.phone}
             placeholder="09 234 567 890"
             handleChangeText={(text) => setForm({ ...form, phone: text })}
@@ -192,17 +192,17 @@ export default function CompleteProfile() {
           />
 
           <FormField
-            title="Address (Optional)"
+            title={t("address")}
             value={form.address}
-            placeholder="Enter your address"
+            placeholder={t("addressPlaceHolder")}
             handleChangeText={(text) => setForm({ ...form, address: text })}
             iconName="location-outline"
           />
 
           <FormField
-            title="City (Optional)"
+            title={t("city")}
             value={form.city}
-            placeholder="Enter your city"
+            placeholder={t("cityPlaceHolder")}
             handleChangeText={(text) => setForm({ ...form, city: text })}
             iconName="map-outline"
           />
@@ -215,7 +215,7 @@ export default function CompleteProfile() {
             className="bg-accent rounded-2xl py-4"
           >
             <Text className="text-primary text-center font-bold text-lg">
-              {isLoading ? "Completing..." : "Complete Profile"}
+              {isLoading ? t("completingMessage") : t("completeMessage")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -226,7 +226,7 @@ export default function CompleteProfile() {
           <View className="absolute inset-0 bg-black/50 justify-center items-center">
             <View className="bg-secondary p-6 rounded-2xl items-center border border-slate-700">
               <Text className="text-slate-300 text-sm">
-                Setting up your profile...
+                {t("settingProfile")}
               </Text>
             </View>
           </View>

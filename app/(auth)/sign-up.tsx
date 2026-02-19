@@ -4,11 +4,13 @@ import { showMessage } from "@/src/lib/utils/dialog";
 import { useAuthStore } from "@/src/store/authStore";
 import { Link } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignUp = () => {
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     fullname: "",
     email: "",
@@ -19,7 +21,7 @@ const SignUp = () => {
 
   const submit = async () => {
     if (!form.fullname || !form.email || !form.password) {
-      showMessage("Please fill in all fields", "warning");
+      showMessage(t("fillAllFields"), "warning");
       return;
     }
 
@@ -40,13 +42,13 @@ const SignUp = () => {
         showsVerticalScrollIndicator={false}
       >
         <View className="w-full justify-center min-h-screen  px-4 py-6">
-          <Text className="font-orbitron text-4xl text-accent mb-2">
-            Join Elite
+          <Text className="font-orbitron text-4xl text-accent mb-2 min-h-[56px] align-middle">
+            {t("joinElite")} {/* Join Elite */}
           </Text>
-          <Text className="text-slate-400 mb-8">Create your account</Text>
+          <Text className="text-slate-400 mb-8">{t("createAccount")}</Text>
 
           <FormField
-            title="Username"
+            title={t("username")}
             placeholder="Enter your name"
             value={form.fullname}
             handleChangeText={(e) => setForm({ ...form, fullname: e })}
@@ -57,7 +59,7 @@ const SignUp = () => {
           />
 
           <FormField
-            title="Email"
+            title={t("email")}
             placeholder="your@email.com"
             value={form.email}
             handleChangeText={(e) => setForm({ ...form, email: e })}
@@ -69,8 +71,8 @@ const SignUp = () => {
           />
 
           <FormField
-            title="Password"
-            placeholder="Enter your password"
+            title={t("password")}
+            placeholder={t("passwordPlaceholder")}
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
@@ -79,7 +81,7 @@ const SignUp = () => {
           />
 
           <Custombutton
-            title="Sign Up"
+            title={t("signUp")}
             handlePress={submit}
             containerStyles="w-full mt-7"
             isLoading={isLoading}
@@ -87,13 +89,13 @@ const SignUp = () => {
 
           <View className="flex-row justify-center items-center pt-5 gap-2">
             <Text className="text-lg text-gray-100 font-inter">
-              Have an account already?
+              {t("alreadyHaveAccount")}
             </Text>
             <Link
               href={"/sign-in"}
               className="text-accent-light textt-lg font-inter-semibold"
             >
-              Sign In
+              {t("signIn")}
             </Link>
           </View>
         </View>

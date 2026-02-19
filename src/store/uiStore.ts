@@ -3,20 +3,31 @@ import { create } from "zustand";
 
 type MessageBoxType = "info" | "success" | "error" | "warning" | "confirm";
 
+interface DialogQueueItem {
+  message: string;
+  type: MessageBoxType;
+  onConfirm?: () => void | Promise<void>;
+  onCancel?: () => void;
+  onClose?: () => void | Promise<void>;
+  confirmText?: string;
+  cancelText?: string;
+}
+
 interface UIState {
   message: string | null;
   type: MessageBoxType;
   show: boolean;
   onConfirm?: () => void | Promise<void>;
   onCancel?: () => void;
-  onClose?: () => void;
+  onClose?: () => void | Promise<void>;
   confirmText?: string;
   cancelText?: string;
+  queue: DialogQueueItem[];
 
   showMessage: (
     msg: string,
     type?: MessageBoxType,
-    onClose?: () => void,
+    onClose?: () => void | Promise<void>,
   ) => void;
   showConfirm: (
     msg: string,
@@ -28,29 +39,63 @@ interface UIState {
     },
   ) => void;
   hideMessage: () => void;
+  processQueue: () => void;
 }
 
-export const useUIStore = create<UIState>((set) => ({
+export const useUIStore = create<UIState>((set, get) => ({
   message: null,
   type: "info",
   show: false,
   onConfirm: undefined,
   onCancel: undefined,
+  onClose: undefined,
   confirmText: "Confirm",
   cancelText: "Cancel",
-  onClose: undefined,
+  queue: [],
 
-  showMessage: (message, type = "info", onClose) =>
+  showMessage: (message, type = "info", onClose) => {
+    const state = get();
+
+    if (state.show) {
+      set({
+        queue: [
+          ...state.queue,
+          { message, type, onClose },
+        ],
+      });
+      return;
+    }
+
     set({
       message,
       type,
       show: true,
       onConfirm: undefined,
       onCancel: undefined,
-      onClose: onClose,
-    }),
+      onClose,
+    });
+  },
 
-  showConfirm: (message, onConfirm, options = {}) =>
+  showConfirm: (message, onConfirm, options = {}) => {
+    const state = get();
+
+    if (state.show) {
+      set({
+        queue: [
+          ...state.queue,
+          {
+            message,
+            type: "confirm",
+            onConfirm,
+            onCancel: options.onCancel,
+            confirmText: options.confirmText,
+            cancelText: options.cancelText,
+          },
+        ],
+      });
+      return;
+    }
+
     set({
       message,
       type: "confirm",
@@ -60,16 +105,40 @@ export const useUIStore = create<UIState>((set) => ({
       onClose: undefined,
       confirmText: options.confirmText || "Confirm",
       cancelText: options.cancelText || "Cancel",
-    }),
+    });
+  },
 
-  hideMessage: () =>
-    set((state) => {
-      state.onClose?.();
-      return {
-        show: false,
-        onConfirm: undefined,
-        onCancel: undefined,
-        onClose: undefined,
-      };
-    }),
+  hideMessage: () => {
+    const state = get();
+
+    set({
+      show: false,
+      onConfirm: undefined,
+      onCancel: undefined,
+      onClose: undefined,
+    });
+    setTimeout(() => {
+      get().processQueue();
+    }, 150);
+  },
+
+  processQueue: () => {
+    const state = get();
+
+    if (state.queue.length === 0) return;
+
+    const [next, ...rest] = state.queue;
+
+    set({
+      message: next.message,
+      type: next.type,
+      show: true,
+      onConfirm: next.onConfirm,
+      onCancel: next.onCancel,
+      onClose: next.onClose,
+      confirmText: next.confirmText || "Confirm",
+      cancelText: next.cancelText || "Cancel",
+      queue: rest,
+    });
+  },
 }));

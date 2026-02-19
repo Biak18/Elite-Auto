@@ -4,7 +4,9 @@ import { useFavoriteStore } from "@/src/store/favoriteStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Platform, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const TabIcon = ({
   name,
@@ -38,6 +40,8 @@ const TabIcon = ({
 };
 
 const TabsLayout = () => {
+  const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { user, profile } = useAuthStore();
   const isSeller = profile?.role === "seller";
   const favoriteCount = useFavoriteStore((state) => state.favoriteIds.size);
@@ -56,11 +60,10 @@ const TabsLayout = () => {
       fetchAppointments(isSeller, user.id);
     }
   }, [user, profile]);
-
   return (
     <Tabs
       screenOptions={{
-        tabBarShowLabel: true,
+        tabBarShowLabel: false,
         tabBarActiveTintColor: "#fbbf24",
         tabBarInactiveTintColor: "#64748b",
 
@@ -68,12 +71,14 @@ const TabsLayout = () => {
           backgroundColor: "#0f172a",
           borderTopColor: "#334155",
           // borderTopWidth: 1,
-          height: Platform.OS === "ios" ? 88 : 65,
-          paddingBottom: Platform.OS === "ios" ? 28 : 10,
+          height: Platform.OS === "ios" ? 78 : 55,
+          // height: Platform.OS === "ios" ? 78 : 55 + insets.bottom,
+          // paddingBottom: Platform.OS === "ios" ? 28 : 10,
           paddingTop: 10,
           position: "absolute",
           borderRadius: 50,
-          marginBottom: 20,
+          marginBottom:
+            Platform.OS === "ios" ? 20 : Math.max(insets.bottom, 20),
           marginLeft: 5,
           marginRight: 5,
         },
@@ -89,7 +94,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: t("home"),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               name={focused ? "home" : "home-outline"}
@@ -102,7 +107,8 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
+          title: t("search"),
+
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               name={focused ? "search" : "search-outline"}
@@ -115,7 +121,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="favorites"
         options={{
-          title: "Favorites",
+          title: t("favorites"),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               name={focused ? "heart" : "heart-outline"}
@@ -129,7 +135,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="appointments"
         options={{
-          title: "Bookings",
+          title: t("appointments"),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               name={focused ? "calendar" : "calendar-outline"}
@@ -144,7 +150,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="seller"
         options={{
-          title: "My Cars",
+          title: t("seller"),
           href: isSeller ? "/seller" : null,
           tabBarIcon: ({ color }) => (
             <Ionicons name="car-sport-outline" size={24} color={color} />
@@ -155,7 +161,7 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: t("profile"),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               name={focused ? "person" : "person-outline"}

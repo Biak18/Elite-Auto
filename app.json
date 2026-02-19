@@ -18,7 +18,6 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#020617"
       },
-      // "permissions": ["android.permission.POST_NOTIFICATIONS"],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.chan.autoelite",
@@ -42,14 +41,7 @@
           }
         }
       ],
-      [
-        "expo-notifications"
-        // {
-        //   "icon": "./assets/images/notification-icon.png",
-        //   "color": "#fbbf24",
-        //   "sounds": ["./assets/sounds/notification.wav"]
-        // }
-      ],
+      ["expo-notifications"],
       "expo-font",
       "@react-native-community/datetimepicker"
     ],
