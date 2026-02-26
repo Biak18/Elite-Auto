@@ -62,6 +62,7 @@ export default function AppointmentDetailScreen() {
           await notifications.appointmentCancelled(
             recipientId,
             appointment.car.name,
+            isSeller,
           );
         } else if (newStatus === "completed") {
           await notifications.appointmentCompleted(

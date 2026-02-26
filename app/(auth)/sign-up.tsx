@@ -92,6 +92,7 @@ const SignUp = () => {
               {t("alreadyHaveAccount")}
             </Text>
             <Link
+              replace
               href={"/sign-in"}
               className="text-accent-light textt-lg font-inter-semibold"
             >

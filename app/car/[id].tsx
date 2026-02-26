@@ -134,21 +134,27 @@ export default function CarDetailScreen() {
   const handleCall = async () => {
     const phone = seller?.phone;
     if (!phone) return;
-    const url = `tel:${phone}`;
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-    }
+    // const url = `tel:${phone.replace(/[^0-9+]/g, "")}`;
+    // const supported = await Linking.canOpenURL(url);
+    // if (supported) {
+    //   await Linking.openURL(url);
+    // }
+
+    const cleanPhone = phone.replace(/[^0-9+]/g, "");
+    await Linking.openURL(`tel:${cleanPhone}`);
   };
 
   const handleMessage = async () => {
     const phone = seller?.phone;
     if (!phone) return;
-    const url = `sms:${phone}`;
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-    }
+    // const url = `sms:${phone}`;
+    // const supported = await Linking.canOpenURL(url);
+    // if (supported) {
+    //   await Linking.openURL(url);
+    // }
+
+    const cleanPhone = phone.replace(/[^0-9+]/g, "");
+    await Linking.openURL(`sms:${cleanPhone}`);
   };
 
   const handleDeleteCar = async () => {

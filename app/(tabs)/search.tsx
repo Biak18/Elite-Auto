@@ -46,6 +46,7 @@ const Search = () => {
   }, []);
 
   useEffect(() => {
+    if (!allCars.length) return;
     setIsSearching(true);
     const timeout = setTimeout(() => {
       let results = [...allCars];

@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
+  AppState,
   FlatList,
   Image,
   Platform,
@@ -24,17 +25,41 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function AppointmentsScreen() {
   const { t } = useTranslation();
   const { user, profile } = useAuthStore();
-  const { appointments, profiles, isLoading, fetchAppointments } =
-    useAppointmentStore();
+  const {
+    appointments,
+    profiles,
+    isLoading,
+    fetchAppointments,
+    subscribeToAppointments,
+    unsubscribeFromAppointments,
+  } = useAppointmentStore();
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
 
   const isSeller = profile?.role === "seller";
+  const [isSendingNotification, setIsSendingNotification] = useState(false);
 
   useEffect(() => {
     if (user && profile) {
       fetchAppointments(isSeller, user.id);
+      subscribeToAppointments(isSeller, user.id);
     }
+
+    return () => {
+      unsubscribeFromAppointments();
+    };
   }, [user, profile]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active" && user && profile) {
+        fetchAppointments(isSeller, user.id);
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [user, profile, isSeller]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -85,6 +110,7 @@ export default function AppointmentsScreen() {
     appointmentId: string,
     newStatus: "confirmed" | "cancelled" | "completed",
   ) => {
+    setIsSendingNotification(true);
     try {
       const appointment = appointments.find((a) => a.id === appointmentId);
       if (!appointment) return;
@@ -110,6 +136,7 @@ export default function AppointmentsScreen() {
           await notifications.appointmentCancelled(
             recipientId,
             appointment.cars.name,
+            isSeller,
           );
         } else if (newStatus === "completed") {
           await notifications.appointmentCompleted(
@@ -128,6 +155,8 @@ export default function AppointmentsScreen() {
       }
     } catch (error: any) {
       showMessage(error.message, "error");
+    } finally {
+      setIsSendingNotification(false);
     }
   };
 
@@ -223,6 +252,7 @@ export default function AppointmentsScreen() {
               <>
                 <TouchableOpacity
                   onPress={() => updateAppointmentStatus(item.id, "confirmed")}
+                  disabled={isSendingNotification}
                   className="flex-1 bg-green-500/20 border border-green-500/30 rounded-xl py-2 flex-row items-center justify-center"
                 >
                   <Ionicons name="checkmark-circle" size={16} color="#4ade80" />
@@ -233,6 +263,7 @@ export default function AppointmentsScreen() {
 
                 <TouchableOpacity
                   onPress={() => updateAppointmentStatus(item.id, "cancelled")}
+                  disabled={isSendingNotification}
                   className="flex-1 bg-red-500/20 border border-red-500/30 rounded-xl py-2 flex-row items-center justify-center"
                 >
                   <Ionicons name="close-circle" size={16} color="#f87171" />
@@ -244,6 +275,7 @@ export default function AppointmentsScreen() {
             ) : (
               <TouchableOpacity
                 onPress={() => updateAppointmentStatus(item.id, "cancelled")}
+                disabled={isSendingNotification}
                 className="flex-1 bg-red-500/20 border border-red-500/30 rounded-xl py-2 flex-row items-center justify-center"
               >
                 <Ionicons name="close-circle" size={16} color="#f87171" />
@@ -259,6 +291,7 @@ export default function AppointmentsScreen() {
           <View className="mt-2 px-4 pb-4">
             <TouchableOpacity
               onPress={() => updateAppointmentStatus(item.id, "completed")}
+              disabled={isSendingNotification}
               className="bg-blue-500/20 border border-blue-500/30 rounded-xl py-2 flex-row items-center justify-center"
             >
               <Ionicons name="checkmark-done" size={16} color="#60a5fa" />
@@ -272,7 +305,7 @@ export default function AppointmentsScreen() {
     );
   };
 
-  if (isLoading) {
+  if (isLoading || isSendingNotification) {
     return (
       <SafeAreaView className="flex-1 bg-primary">
         <View className="flex-1 justify-center items-center">

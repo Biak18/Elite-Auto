@@ -48,7 +48,7 @@ export const notifications = {
   ) => {
     return sendNotification(
       userId,
-      "Appointment Confirmed! 🎉",
+      "Appointment Confirmed!",
       `Your test drive for ${carName} has been confirmed!`,
       {
         type: "appointment_confirmed",
@@ -66,7 +66,7 @@ export const notifications = {
   ) => {
     return sendNotification(
       sellerId,
-      "New Booking Request 📅",
+      "New Booking Request",
       `${buyerName} wants to book a test drive for ${carName}`,
       {
         type: "new_booking",
@@ -76,11 +76,17 @@ export const notifications = {
     );
   },
 
-  appointmentCancelled: async (userId: string, carName: string) => {
+  appointmentCancelled: async (
+    userId: string,
+    carName: string,
+    isSeller: boolean,
+  ) => {
     return sendNotification(
       userId,
-      "Appointment Cancelled ❌",
-      `Your test drive for ${carName} has been cancelled by the seller.`,
+      `Test Drive ${isSeller ? "Request Declined" : "Appointment Cancelled"}`,
+      isSeller
+        ? `Your test drive request for ${carName} was declined by the seller. You can explore other available cars or request another time slot.`
+        : `Your scheduled test drive for ${carName} was cancelled by the buyer. The time slot is now available for other bookings.`,
       {
         type: "appointment_cancelled",
         screen: "appointments",
@@ -91,7 +97,7 @@ export const notifications = {
   appointmentCompleted: async (userId: string, carName: string) => {
     return sendNotification(
       userId,
-      "Test Drive Completed ✅",
+      "Test Drive Completed",
       `Thank you for test driving ${carName}! We hope you enjoyed it.`,
       {
         type: "appointment_completed",
@@ -103,7 +109,7 @@ export const notifications = {
   carApproved: async (sellerId: string, carName: string, carId: string) => {
     return sendNotification(
       sellerId,
-      "Car Listing Approved! ✅",
+      "Car Listing Approved!",
       `Your ${carName} is now live on the marketplace!`,
       {
         type: "car_approved",
@@ -116,7 +122,7 @@ export const notifications = {
   carRejected: async (sellerId: string, carName: string, reason?: string) => {
     return sendNotification(
       sellerId,
-      "Car Listing Rejected ❌",
+      "Car Listing Rejected",
       reason || `Your ${carName} listing needs some changes before approval.`,
       {
         type: "car_rejected",
