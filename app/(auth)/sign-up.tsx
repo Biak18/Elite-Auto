@@ -16,6 +16,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { signUp, isLoading } = useAuthStore();
 
@@ -26,9 +27,12 @@ const SignUp = () => {
     }
 
     try {
+      setIsSubmitting(true);
       await signUp(form.email, form.password, form.fullname);
     } catch (error: any) {
       showMessage(error.message, "error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -55,7 +59,7 @@ const SignUp = () => {
             otherStyles="mt-7"
             iconName="person-outline"
             autoCapitalize="none"
-            readOnly={isLoading}
+            readOnly={isLoading || isSubmitting}
           />
 
           <FormField
@@ -67,7 +71,7 @@ const SignUp = () => {
             iconName="mail-outline"
             keyboardType="email-address"
             autoCapitalize="none"
-            readOnly={isLoading}
+            readOnly={isLoading || isSubmitting}
           />
 
           <FormField
@@ -77,14 +81,14 @@ const SignUp = () => {
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
             iconName="lock-closed-outline"
-            readOnly={isLoading}
+            readOnly={isLoading || isSubmitting}
           />
 
           <Custombutton
             title={t("signUp")}
             handlePress={submit}
             containerStyles="w-full mt-7"
-            isLoading={isLoading}
+            isLoading={isLoading || isSubmitting}
           />
 
           <View className="flex-row justify-center items-center pt-5 gap-2">

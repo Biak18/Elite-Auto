@@ -148,7 +148,7 @@ export default function AppointmentsScreen() {
         showMessage("Failed to send notification:" + notifError, "error");
       }
 
-      showMessage(`Booking ${newStatus} successfully`, "success");
+      showMessage(t("bookingMsg." + newStatus), "success");
 
       if (user && profile) {
         fetchAppointments(isSeller, user.id);

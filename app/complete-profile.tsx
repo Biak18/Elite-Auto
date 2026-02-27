@@ -1,6 +1,7 @@
 import FormField from "@/src/components/ui/FormField";
 import { supabase } from "@/src/lib/supabase";
 import { showMessage } from "@/src/lib/utils/dialog";
+import { normalizeMyanmarPhone } from "@/src/lib/utils/formatters";
 import { useAuthStore } from "@/src/store/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -68,6 +69,11 @@ export default function CompleteProfile() {
 
     if (!form.phone.trim()) {
       showMessage(t("requiredField", { name: t("phoneNumber") }));
+      return;
+    }
+
+    if (!normalizeMyanmarPhone(form.phone.trim())) {
+      showMessage(t("invalidPhoneNumber"));
       return;
     }
 
@@ -185,7 +191,7 @@ export default function CompleteProfile() {
           <FormField
             title={t("phoneNumber")}
             value={form.phone}
-            placeholder="09 234 567 890"
+            placeholder="+959 234 567 890"
             handleChangeText={(text) => setForm({ ...form, phone: text })}
             iconName="call-outline"
             keyboardType="phone-pad"

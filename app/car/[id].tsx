@@ -1,6 +1,7 @@
 // app/car/[id].tsx
 import BookingModal from "@/src/components/BookingModal";
 import { supabase } from "@/src/lib/supabase";
+import { handleCall, handleMessage } from "@/src/lib/utils/common";
 import { showConfirm, showMessage } from "@/src/lib/utils/dialog";
 import { formatPrice } from "@/src/lib/utils/formatters";
 import { useAppointmentStore } from "@/src/store/appointmentStore";
@@ -16,7 +17,6 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  Linking,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -130,32 +130,6 @@ export default function CarDetailScreen() {
       fetchAppointments(isSeller, user.id);
     }
   }, [user, profile]);
-
-  const handleCall = async () => {
-    const phone = seller?.phone;
-    if (!phone) return;
-    // const url = `tel:${phone.replace(/[^0-9+]/g, "")}`;
-    // const supported = await Linking.canOpenURL(url);
-    // if (supported) {
-    //   await Linking.openURL(url);
-    // }
-
-    const cleanPhone = phone.replace(/[^0-9+]/g, "");
-    await Linking.openURL(`tel:${cleanPhone}`);
-  };
-
-  const handleMessage = async () => {
-    const phone = seller?.phone;
-    if (!phone) return;
-    // const url = `sms:${phone}`;
-    // const supported = await Linking.canOpenURL(url);
-    // if (supported) {
-    //   await Linking.openURL(url);
-    // }
-
-    const cleanPhone = phone.replace(/[^0-9+]/g, "");
-    await Linking.openURL(`sms:${cleanPhone}`);
-  };
 
   const handleDeleteCar = async () => {
     if (!selectedCar) return;
@@ -451,7 +425,7 @@ export default function CarDetailScreen() {
 
                 <View className="flex-row gap-3">
                   <TouchableOpacity
-                    onPress={handleCall}
+                    onPress={() => handleCall(seller?.phone || "", t)}
                     disabled={!seller?.phone}
                     className={`flex-1 rounded-xl py-3 flex-row items-center justify-center border ${
                       seller?.phone
@@ -472,7 +446,7 @@ export default function CarDetailScreen() {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    onPress={handleMessage}
+                    onPress={() => handleMessage(seller?.phone || "", t)}
                     disabled={!seller?.phone}
                     className={`flex-1 rounded-xl py-3 flex-row items-center justify-center border ${
                       seller?.phone

@@ -3,11 +3,13 @@ import FormField from "@/src/components/ui/FormField";
 import { uploadAvatar } from "@/src/lib/api/users";
 import { supabase } from "@/src/lib/supabase";
 import { showMessage } from "@/src/lib/utils/dialog";
+import { normalizeMyanmarPhone } from "@/src/lib/utils/formatters";
 import { useAuthStore } from "@/src/store/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
@@ -19,6 +21,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const EditProfile = () => {
+  const { t } = useTranslation();
   const {
     profile,
     user,
@@ -54,12 +57,17 @@ const EditProfile = () => {
 
   const handleSave = async () => {
     if (!form.fullName.trim()) {
-      showMessage("Full name cannot be empty", "warning");
+      showMessage(t("cannotEmmpty", { name: "Full Name" }), "warning");
       return;
     }
 
-    if (form.phone && !/^\+?[\d\s-()]{7,15}$/.test(form.phone)) {
-      showMessage("Please enter a valid phone number", "warning");
+    // if (form.phone && !/^\+?[\d\s-()]{7,15}$/.test(form.phone)) {
+    //   showMessage("Please enter a valid phone number", "warning");
+    //   return;
+    // }
+
+    if (form.phone && !normalizeMyanmarPhone(form.phone.trim())) {
+      showMessage(t("invalidPhoneNumber"));
       return;
     }
 
@@ -81,7 +89,7 @@ const EditProfile = () => {
       if (error) throw error;
 
       if (user) await fetchProfile(user.id);
-      showMessage("Profile updated successfully!", "success", {
+      showMessage(t("profileUpdated"), "success", {
         onClose: () => router.back(),
       });
     } catch (error: any) {
@@ -96,10 +104,7 @@ const EditProfile = () => {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        showMessage(
-          "Permission required \n Please allow access to your photos.",
-          "warning",
-        );
+        showMessage(t("permissionsRequired"), "warning");
         return;
       }
 
@@ -139,7 +144,7 @@ const EditProfile = () => {
       if (error) throw error;
       await fetchProfile(user.id);
 
-      showMessage("Profile picture updated!", "success");
+      showMessage(t("profilePictureUpdated"), "success");
     } catch (error) {
       throw error;
     } finally {
@@ -159,7 +164,7 @@ const EditProfile = () => {
           </TouchableOpacity>
 
           <Text className="text-xl font-orbitron-bold text-accent">
-            Edit Profile
+            {t("editProfile")}
           </Text>
 
           <TouchableOpacity
@@ -201,26 +206,26 @@ const EditProfile = () => {
               className="border-b border-accent mt-3"
               onPress={pickImage}
             >
-              <Text className="text-accent font-inter">Change Photo</Text>
+              <Text className="text-accent font-inter">{t("changePhoto")}</Text>
             </TouchableOpacity>
           </View>
           <View className="px-6 mt-6">
-            <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-              Personal Information
+            <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2 pb-2">
+              {t("personalInfo")}
             </Text>
 
             <FormField
-              title="Full Name"
+              title={t("fullName")}
               value={form.fullName}
-              placeholder="Enter your full name"
+              placeholder={t("fullNamePlaceHolder")}
               handleChangeText={(text) => setForm({ ...form, fullName: text })}
               iconName="person-outline"
             />
 
             <FormField
-              title="Phone Number"
+              title={t("phoneNumber")}
               value={form.phone}
-              placeholder="09 725 870 458"
+              placeholder="+959 725 870 458"
               handleChangeText={(text) => setForm({ ...form, phone: text })}
               iconName="call-outline"
               keyboardType="phone-pad"
@@ -228,7 +233,7 @@ const EditProfile = () => {
             />
 
             <FormField
-              title="Date of Birth"
+              title={t("dateOfBirth")}
               value={form.dateOfBirth}
               placeholder="DD / MM / YYYY"
               handleChangeText={(text) =>
@@ -240,9 +245,9 @@ const EditProfile = () => {
             />
             <View className="mt-4">
               <DropdownPicker
-                title="Gender"
+                title={t("gender")}
                 value={form.gender}
-                placeholder="Select gender"
+                placeholder={t("selectGender")}
                 options={genderOptions}
                 iconName="person-outline"
                 showPicker={showGenderPicker}
@@ -254,97 +259,26 @@ const EditProfile = () => {
                   setShowGenderPicker(false);
                 }}
               />
-
-              <Text className="text-base text-gray-300 font-medium mb-2">
-                Gender
-              </Text>
-              <TouchableOpacity
-                onPress={() => setShowGenderPicker(!showGenderPicker)}
-                className="w-full h-16 px-4 bg-slate-900/60 rounded-2xl flex-row items-center border border-slate-600"
-                // style={{
-                //   borderWidth: 1,
-                //   borderColor: "#475569",
-                // }}
-                activeOpacity={1}
-              >
-                <Ionicons
-                  name="person-outline"
-                  size={20}
-                  color="#64748b"
-                  className="mr-4"
-                  // style={{ marginRight: 12 }}
-                />
-                <Text
-                  className={`flex-1 text-base ${
-                    form.gender ? "text-white" : "text-slate-500"
-                  }`}
-                >
-                  {form.gender || "Select gender"}
-                </Text>
-                <Ionicons
-                  name={showGenderPicker ? "chevron-up" : "chevron-down"}
-                  size={20}
-                  color="#64748b"
-                />
-              </TouchableOpacity>
-
-              {showGenderPicker && (
-                <View className="mt-2 bg-secondary rounded-2xl border border-slate-700 overflow-hidden">
-                  {genderOptions.map((option) => (
-                    <TouchableOpacity
-                      key={option}
-                      onPress={() => {
-                        setForm({ ...form, gender: option });
-                        setShowGenderPicker(false);
-                      }}
-                      className={`px-4 py-3 flex-row items-center ${
-                        form.gender === option ? "bg-accent/10" : ""
-                      }`}
-                    >
-                      <Ionicons
-                        name={
-                          form.gender === option
-                            ? "checkmark-circle"
-                            : "radio-button-off"
-                        }
-                        size={20}
-                        color={form.gender === option ? "#fbbf24" : "#64748b"}
-                        className="mr-4"
-                        // style={{ marginRight: 12 }}
-                      />
-                      <Text
-                        className={`text-base ${
-                          form.gender === option
-                            ? "text-accent"
-                            : "text-slate-300"
-                        }`}
-                      >
-                        {option}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
             </View>
           </View>
 
           <View className="px-6 mt-6">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-              Address
+              {t("address")}
             </Text>
 
             <FormField
-              title="Address"
+              title={t("address")}
               value={form.address}
-              placeholder="Enter your address"
+              placeholder={t("addressPlaceHolder")}
               handleChangeText={(text) => setForm({ ...form, address: text })}
               iconName="location-outline"
             />
 
             <FormField
-              title="City"
+              title={t("city")}
               value={form.city}
-              placeholder="Enter your city"
+              placeholder={t("cityPlaceHolder")}
               handleChangeText={(text) => setForm({ ...form, city: text })}
               iconName="map-outline"
               otherStyles="mt-4"
@@ -385,7 +319,7 @@ const EditProfile = () => {
 
           <View className="px-6 mt-6">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-              Account Type
+              {t("accountType")}
             </Text>
 
             <View className="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/30">
@@ -408,14 +342,14 @@ const EditProfile = () => {
                     {profile?.role === "admin"
                       ? "Admin Account"
                       : profile?.role === "seller"
-                        ? "Seller Account"
-                        : "Buyer Account"}
+                        ? t("sellerAccount")
+                        : t("buyerAccount")}
                   </Text>
                   {profile?.role === "admin" ? null : (
                     <Text className="text-slate-400 text-sm mt-0.5">
                       {profile?.role === "seller"
-                        ? "You can list cars for sale"
-                        : "You can browse and purchase cars"}
+                        ? t("sellCars")
+                        : t("buyCars")}
                     </Text>
                   )}
                 </View>
@@ -423,18 +357,18 @@ const EditProfile = () => {
               </View>
             </View>
 
-            <Text className="text-slate-500 text-xs mt-2 ml-1">
-              Contact support to change your account type
+            <Text className="text-slate-500 text-xs mt-2 ml-1 pb-2">
+              {t("contactSupport")}
             </Text>
           </View>
 
           <View className="px-6 mt-6 mb-8">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-4">
-              Account
+              {t("account")}
             </Text>
 
             <FormField
-              title="Email"
+              title={t("email")}
               value={form.email}
               placeholder="your@email.com"
               iconName="mail-outline"
@@ -442,7 +376,7 @@ const EditProfile = () => {
             />
 
             <Text className="text-slate-500 text-xs mt-2 ml-1">
-              Email cannot be changed. Contact support if needed.
+              {t("changeEmail")}
             </Text>
           </View>
         </ScrollView>
@@ -450,7 +384,7 @@ const EditProfile = () => {
           <View className="absolute inset-0 bg-black/50 justify-center items-center rounded-xl">
             <View className="bg-secondary p-6 rounded-2xl items-center border border-slate-700">
               <ActivityIndicator color="#fbbf24" size="large" />
-              <Text className="text-slate-300 text-sm mt-3">Saving...</Text>
+              <Text className="text-slate-300 text-sm mt-3">{t("saving")}</Text>
             </View>
           </View>
         )}

@@ -85,6 +85,11 @@ export default {
     bookingSent: "Booking Sent!",
     bookingSentMessage:
         "Your test drive request has been sent. The seller will contact you soon.",
+    bookingMsg: {
+        confirmed: "Booking confirmed successfully",
+        cancelled: "Booking cancelled successfully",
+        completed: "Booking marked as completed successfully",
+    },
 
     // Appointments
     bookings: "Bookings",
@@ -105,6 +110,15 @@ export default {
     cancelBooking: "Cancel Booking",
     markAsCompleted: "Mark as Completed",
     buyer: "Buyer",
+    appointmentMsg: {
+        confirmed: "Appointment confirmed successfully",
+        cancelled: "Appointment cancelled successfully",
+        completed: "Appointment marked as completed successfully",
+    },
+    appointmentNotFound: "Appointment not found",
+    goBack: "Go Back",
+    appointmentDetails: "Appointment Details",
+    appointmentTime: "Appointment Time",
 
     // Profile
     manageAccount: "Manage your account settings",
@@ -119,6 +133,21 @@ export default {
         noti: "Push notifications",
         lang: "English (US)",
     },
+    cannotEmmpty: "{{name}} cannot be empty",
+    profileUpdated: "Profile updated successfully",
+    profilePictureUpdated: "Profile picture updated successfully",
+    changePhoto: "Change Photo",
+    personalInfo: "Personal Information",
+    dateOfBirth: "Date of Birth",
+    gender: "Gender",
+    selectGender: "Select gender",
+    accountType: "Account Type",
+    sellerAccount: "Seller Account",
+    buyerAccount: "Buyer Account",
+    sellCars: "You can list cars for sale",
+    buyCars: "You can browse and purchase cars",
+    contactSupport: "Contact support to change your account type",
+    changeEmail: "Email cannot be changed. Contact support if needed.",
 
     // Seller Dashboard
     myCars: "My Cars",
@@ -208,6 +237,8 @@ export default {
         "New password must be different from current password",
     passwordMessage:
         "Password changed successfully!\n\nPlease sign in again with your new password.",
+    permissionsRequired:
+        "Permission required \n Please allow access to your photos.",
 
     // Common
     loading: "Loading...",
@@ -221,6 +252,9 @@ export default {
     done: "Done",
     sending: "Sending...",
     loadingMore: "Loading more...",
-
+    invalidPhoneNumber: "Please enter a valid Myanmar phone number",
+    phoneAlert: "This user hasn't added a phone number",
     requiredField: "{{name}} is required",
+    saving: "Saving...",
+    account: "Account",
 };

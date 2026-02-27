@@ -1,5 +1,6 @@
 // app/appointment/[id].tsx
 import { supabase } from "@/src/lib/supabase";
+import { handleCall, handleMessage } from "@/src/lib/utils/common";
 import { showMessage } from "@/src/lib/utils/dialog";
 import { formatPrice, formatTime } from "@/src/lib/utils/formatters";
 import { notifications } from "@/src/lib/utils/notifications";
@@ -8,10 +9,10 @@ import { useAuthStore } from "@/src/store/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
-  Linking,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -20,6 +21,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AppointmentDetailScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useAuthStore();
   const { profile } = useAuthStore();
@@ -75,35 +77,11 @@ export default function AppointmentDetailScreen() {
       }
 
       updateAppointmentStatus(id, newStatus);
-      showMessage(`Appointment ${newStatus} successfully`, "success");
+      showMessage(t(`appointmentMsg.${newStatus}`), "success");
       fetchAppointmentDetails(id); // Refresh detail
       if (user) fetchAppointments(isSeller, user.id); // Refresh the appointment page
     } catch (error: any) {
       showMessage(error.message, "error");
-    }
-  };
-
-  const handleCall = async (phone: string | null) => {
-    if (!phone) {
-      showMessage("This user hasn't added a phone number", "warning");
-      return;
-    }
-    const url = `tel:${phone}`;
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-    }
-  };
-
-  const handleMessage = async (phone: string | null) => {
-    if (!phone) {
-      showMessage("This user hasn't added a phone number", "warning");
-      return;
-    }
-    const url = `sms:${phone}`;
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
     }
   };
 
@@ -157,12 +135,14 @@ export default function AppointmentDetailScreen() {
       <SafeAreaView className="flex-1 bg-primary">
         <View className="flex-1 justify-center items-center">
           <Ionicons name="calendar-outline" size={64} color="#475569" />
-          <Text className="text-slate-400 mt-4">Appointment not found</Text>
+          <Text className="text-slate-400 mt-4">
+            {t("appointmentNotFound")}
+          </Text>
           <TouchableOpacity
             onPress={() => router.back()}
             className="mt-4 bg-accent px-6 py-3 rounded-xl"
           >
-            <Text className="text-primary font-semibold">Go Back</Text>
+            <Text className="text-primary font-semibold">{t("goBack")}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -179,7 +159,7 @@ export default function AppointmentDetailScreen() {
           <Ionicons name="chevron-back" size={24} color="#fbbf24" />
         </TouchableOpacity>
         <Text className="text-xl font-orbitron text-accent">
-          Appointment Details
+          {t("appointmentDetails")}
         </Text>
         <View className="w-6" />
       </View>
@@ -224,7 +204,7 @@ export default function AppointmentDetailScreen() {
 
         <View className="px-6 mb-6">
           <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
-            Appointment Time
+            {t("appointmentTime")}
           </Text>
           <View className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/30">
             <View className="flex-row items-center mb-3">
@@ -253,7 +233,7 @@ export default function AppointmentDetailScreen() {
         {appointment.notes && (
           <View className="px-6 mb-6">
             <Text className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
-              Notes
+              {t("notes")}
             </Text>
             <View className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/30">
               <Text className="text-slate-300 text-base">
@@ -302,7 +282,7 @@ export default function AppointmentDetailScreen() {
 
             <View className="flex-row gap-3 mt-4">
               <TouchableOpacity
-                onPress={() => handleCall(contactPerson.phone)}
+                onPress={() => handleCall(contactPerson.phone, t)}
                 className="flex-1 bg-accent/10 border border-accent/30 rounded-xl py-3 flex-row items-center justify-center"
               >
                 <Ionicons name="call" size={20} color="#fbbf24" />
@@ -310,7 +290,7 @@ export default function AppointmentDetailScreen() {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => handleMessage(contactPerson.phone)}
+                onPress={() => handleMessage(contactPerson.phone, t)}
                 className="flex-1 bg-accent/10 border border-accent/30 rounded-xl py-3 flex-row items-center justify-center"
               >
                 <Ionicons name="chatbubble" size={20} color="#fbbf24" />
@@ -329,7 +309,9 @@ export default function AppointmentDetailScreen() {
                   className="flex-1 bg-green-500/20 border border-green-500/30 rounded-xl py-4 flex-row items-center justify-center"
                 >
                   <Ionicons name="checkmark-circle" size={20} color="#4ade80" />
-                  <Text className="text-green-400 font-bold ml-2">Confirm</Text>
+                  <Text className="text-green-400 font-bold ml-2">
+                    {t("confirm")}
+                  </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -337,7 +319,9 @@ export default function AppointmentDetailScreen() {
                   className="flex-1 bg-red-500/20 border border-red-500/30 rounded-xl py-4 flex-row items-center justify-center"
                 >
                   <Ionicons name="close-circle" size={20} color="#f87171" />
-                  <Text className="text-red-400 font-bold ml-2">Decline</Text>
+                  <Text className="text-red-400 font-bold ml-2">
+                    {t("decline")}
+                  </Text>
                 </TouchableOpacity>
               </View>
             ) : (
@@ -347,7 +331,7 @@ export default function AppointmentDetailScreen() {
               >
                 <Ionicons name="close-circle" size={20} color="#f87171" />
                 <Text className="text-red-400 font-bold ml-2">
-                  Cancel Booking
+                  {t("cancelBooking")}
                 </Text>
               </TouchableOpacity>
             )}
@@ -362,7 +346,7 @@ export default function AppointmentDetailScreen() {
             >
               <Ionicons name="checkmark-done" size={20} color="#60a5fa" />
               <Text className="text-blue-400 font-bold ml-2">
-                Mark as Completed
+                {t("markAsCompleted")}
               </Text>
             </TouchableOpacity>
           </View>
